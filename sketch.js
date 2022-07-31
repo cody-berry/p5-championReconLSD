@@ -2,6 +2,27 @@
  *  @author Cody
  *  @date 2022.7.30
  *
+ *  download http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json
+ *  as a file and load it in JSON. print it out
+ *  examine the structure of items.json, champions.json,
+ *  {someChampion}.json, {someItemID}.json.
+ *  display one image of a champion
+ *  display ability images from a champion
+ *  display passive image from a champion
+ *  make it so that it loads a random champion every time
+ *  make it so that if you press P or 1, it will reveal the champion's passive's
+ *  tooltip in HTML
+ *  make it so that if you press:
+ *      Q or 2, it will reveal the champion's Q's tooltip in HTML
+ *      W or 3, it will reveal the champion's W's tooltip in HTML
+ *      .
+ *      .
+ *      .
+ *  write an algorithm that will figure out all the opening and closing
+ *  tags, and which closing tag closes a specific opening tag, then parse
+ *  the tooltip with the algorithm
+ *  replace all the opening and closing brackets with their respective values
+ *  color everything in between the brackets and add the appropriate images
  */
 
 let font
