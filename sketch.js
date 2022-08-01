@@ -28,10 +28,20 @@
 let font
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
+let champions // a list of champions with their own detail
+
+/*
+* Links:
+*   Champions: http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json
+*   Champion: http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions/Cassiopeia.json
+*   Items: http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items.json
+*   Item: https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items/3001.json
+ */
 
 
 function preload() {
     font = loadFont('data/consola.ttf')
+    champions = loadJSON('champions.json')
 }
 
 
@@ -47,6 +57,8 @@ function setup() {
         numpad 1 → freeze sketch</pre>`)
 
     debugCorner = new CanvasDebugCorner(5)
+
+    console.log(champions)
 }
 
 
