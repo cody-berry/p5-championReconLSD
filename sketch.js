@@ -29,6 +29,7 @@ let font
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
 let champions // a list of champions with their own detail
+let items // a list of all the League items
 
 /*
 * Links:
@@ -42,6 +43,7 @@ let champions // a list of champions with their own detail
 function preload() {
     font = loadFont('data/consola.ttf')
     champions = loadJSON('champions.json')
+    items = loadJSON('items.json')
 }
 
 
@@ -59,6 +61,7 @@ function setup() {
     debugCorner = new CanvasDebugCorner(5)
 
     console.log(champions)
+    console.log(items)
 }
 
 
