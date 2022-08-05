@@ -29,7 +29,11 @@ let font
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
 let champions // a list of champions with their own detail
+let championData // a dictionary of all the champion data, the key of which
+// champion, and the value of the champion details!
 let items // a list of all the League items
+let itemData // a dictionary of all the item data, the key of which item
+// code, and the value of the item details!
 
 /*
 * Links:
@@ -62,6 +66,14 @@ function setup() {
 
     console.log(champions)
     console.log(items)
+
+    for (let championName of Object.keys(champions)) {
+        championData[championName] = loadJSON(`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions/${championName}.json`)
+    }
+
+    for (let itemName of Object.keys(items)) {
+        itemData[itemName] = loadJSON(`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items/${itemName}.json`)
+    }
 }
 
 
@@ -75,6 +87,12 @@ function draw() {
 
     if (frameCount > 3000)
         noLoop()
+
+    if (itemData) {
+        console.log(championData)
+        console.log(itemData)
+
+    }
 }
 
 
