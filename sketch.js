@@ -2,38 +2,38 @@
  *  @author Cody
  *  @date 2022.7.30
  *
- *  download http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json
+ *  ☒ download
+ *  http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json
  *  as a file and load it in JSON. print it out
- *  examine the structure of items.json, champions.json,
- *  {someChampion}.json, {someItemID}.json.
- *  display one image of a champion
- *  display ability images from a champion
- *  display passive image from a champion
- *  make it so that it loads a random champion every time
- *  make it so that if you press P or 1, it will reveal the champion's passive's
- *  tooltip in HTML
- *  make it so that if you press:
- *      Q or 2, it will reveal the champion's Q's tooltip in HTML
- *      W or 3, it will reveal the champion's W's tooltip in HTML
- *      .
- *      .
- *      .
- *  write an algorithm that will figure out all the opening and closing
- *  tags, and which closing tag closes a specific opening tag, then parse
- *  the tooltip with the algorithm
- *  replace all the opening and closing brackets with their respective values
- *  color everything in between the brackets and add the appropriate images
+ *  ☐ display one image of a champion
+ *  ☐ display ability images from a champion
+ *  ☐ display passive image from a champion
+ *  ☐ make it so that it loads a random champion every time
+ *  ☐ make it so that if you press P or 1, it will reveal the champion's
+ *  passive's tooltip in HTML
+ *  ☐☐☐☐☐ make it so that if you press:
+ *  ☐     Q or 2, it will reveal the champion's Q's tooltip in HTML
+ *  ☐     W or 3, it will reveal the champion's W's tooltip in HTML
+ *  ☐     .
+ *  ☐     .
+ *  ☐     .
+ *  ☐ write an algorithm that will figure out all the opening and closing
+ *  ☐ tags, and which closing tag closes a specific opening tag, then parse
+ *  ☐ the tooltip with the algorithm
+ *  ☐ replace all the opening and closing brackets with their respective
+ *  values
+ *  ☐ color everything in between the brackets and add the appropriate images
  */
 
 let font
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
 let champions // a list of champions with their own detail
-let championData // a dictionary of all the champion data, the key of which
-// champion, and the value of the champion details!
 let items // a list of all the League items
-let itemData // a dictionary of all the item data, the key of which item
-// code, and the value of the item details!
+/* a dictionary with keys of champion names and values of
+ the respective champion icon. later this will include the ability icons
+*/
+let championImages = {}
 
 /*
 * Links:
@@ -64,21 +64,22 @@ function setup() {
 
     debugCorner = new CanvasDebugCorner(5)
 
-    console.log(champions)
-    console.log(items)
+    getChampionImages()
+}
 
-    for (let championName of Object.keys(champions)) {
-        championData[championName] = loadJSON(`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions/${championName}.json`)
-    }
-
-    for (let itemName of Object.keys(items)) {
-        itemData[itemName] = loadJSON(`https://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/items/${itemName}.json`)
+// gets all the champion icons
+function getChampionImages() {
+    for (let championDetails of Object.values(champions)) {
+        championImages[championDetails["name"]] = loadImage(championDetails["icon"])
     }
 }
 
-
 function draw() {
     background(234, 34, 24)
+
+    if (championImages['Zyra']) {
+        image(championImages['Annie'], 50, 50, 75, 75)
+    }
 
     /* debugCorner needs to be last so its z-index is highest */
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
@@ -87,12 +88,6 @@ function draw() {
 
     if (frameCount > 3000)
         noLoop()
-
-    if (itemData) {
-        console.log(championData)
-        console.log(itemData)
-
-    }
 }
 
 
