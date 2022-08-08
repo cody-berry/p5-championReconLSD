@@ -5,7 +5,7 @@
  *  ☒ download
  *  http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json
  *  as a file and load it in JSON. print it out
- *  ☐ display one image of a champion
+ *  ☒ 1display one image of a champion
  *  ☐ display ability images from a champion
  *  ☐ display passive image from a champion
  *  ☐ make it so that it loads a random champion every time
@@ -27,13 +27,19 @@
 
 let font
 let instructions
-let debugCorner /* output debug text in the bottom left corner of the canvas */
+let debugCorner // output debug text in the bottom left corner of the canvas //
 let champions // a list of champions with their own detail
 let items // a list of all the League items
-/* a dictionary with keys of champion names and values of
- the respective champion icon. later this will include the ability icons
+
+/* a dictionary with keys of champion names and values of the respective
+ champion icon.
 */
 let championImages = {}
+
+/* a dictionary with keys of champion names and values of the respective
+ ability icons.
+ */
+let abilityImages = {}
 
 /*
 * Links:
@@ -65,6 +71,7 @@ function setup() {
     debugCorner = new CanvasDebugCorner(5)
 
     getChampionImages()
+    getAbilityIcons('Annie')
 }
 
 // gets all the champion icons
@@ -74,11 +81,31 @@ function getChampionImages() {
     }
 }
 
+// gets all the ability icons
+function getAbilityIcons(championName) {
+    let championAbilityImages = []
+
+    let championDetails = champions[championName]
+    for (let ability of Object.values(championDetails["abilities"])) {
+        console.log(ability[0]['icon'])
+        championAbilityImages.push(loadImage(ability[0]['icon']))
+    }
+
+    abilityImages[championName] = championAbilityImages
+}
+
 function draw() {
     background(234, 34, 24)
 
-    if (championImages['Zyra']) {
+    if (abilityImages['Annie'][4]) {
         image(championImages['Annie'], 50, 50, 75, 75)
+
+        let abilityIconNumber = 1
+
+        for (let annieAbilityIcon of abilityImages['Annie']) {
+            image(annieAbilityIcon, 75 + abilityIconNumber*60, 50, 50, 50)
+            abilityIconNumber++
+        }
     }
 
     /* debugCorner needs to be last so its z-index is highest */
