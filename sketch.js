@@ -5,9 +5,9 @@
  *  ☒ download
  *  http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json
  *  as a file and load it in JSON. print it out
- *  ☒ 1display one image of a champion
- *  ☐ display ability images from a champion
- *  ☐ display passive image from a champion
+ *  ☒ display one image of a champion
+ *  ☒ display ability images from a champion
+ *  ☒ display passive image from a champion
  *  ☐ make it so that it loads a random champion every time
  *  ☐ make it so that if you press P or 1, it will reveal the champion's
  *  passive's tooltip in HTML
@@ -41,6 +41,9 @@ let championImages = {}
  */
 let abilityImages = {}
 
+// the League champion we're loading
+let champion
+
 /*
 * Links:
 *   Champions: http://cdn.merakianalytics.com/riot/lol/resources/latest/en-US/champions.json
@@ -70,8 +73,10 @@ function setup() {
 
     debugCorner = new CanvasDebugCorner(5)
 
+    champion = random(Object.keys(champions))
+
     getChampionImages()
-    getAbilityIcons('Annie')
+    getAbilityIcons(champion)
 }
 
 // gets all the champion icons
@@ -97,12 +102,12 @@ function getAbilityIcons(championName) {
 function draw() {
     background(234, 34, 24)
 
-    if (abilityImages['Annie'][4]) {
-        image(championImages['Annie'], 50, 50, 75, 75)
+    if (abilityImages[champion][4]) {
+        image(championImages[champion], 50, 50, 75, 75)
 
         let abilityIconNumber = 1
 
-        for (let annieAbilityIcon of abilityImages['Annie']) {
+        for (let annieAbilityIcon of abilityImages[champion]) {
             image(annieAbilityIcon, 75 + abilityIconNumber*60, 50, 50, 50)
             abilityIconNumber++
         }
