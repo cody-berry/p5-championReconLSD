@@ -8,10 +8,10 @@
  *  ☒ display one image of a champion
  *  ☒ display ability images from a champion
  *  ☒ display passive image from a champion
- *  ☐ make it so that it loads a random champion every time
+ *  ☒ make it so that it loads a random champion every time
  *  ☐ make it so that if you press P or 1, it will reveal the champion's
  *  passive's tooltip in HTML
- *  ☐☐☐☐☐ make it so that if you press:
+ *  ☐ ☐ ☐ ☐ ☐ make it so that if you press:
  *  ☐     Q or 2, it will reveal the champion's Q's tooltip in HTML
  *  ☐     W or 3, it will reveal the champion's W's tooltip in HTML
  *  ☐     .
@@ -107,8 +107,8 @@ function draw() {
 
         let abilityIconNumber = 1
 
-        for (let annieAbilityIcon of abilityImages[champion]) {
-            image(annieAbilityIcon, 75 + abilityIconNumber*60, 50, 50, 50)
+        for (let abilityIcon of abilityImages[champion]) {
+            image(abilityIcon, 75 + abilityIconNumber*60, 50, 50, 50)
             abilityIconNumber++
         }
     }
@@ -129,6 +129,14 @@ function keyPressed() {
         noLoop()
         instructions.html(`<pre>
             sketch stopped</pre>`)
+    }
+    /* display the tooltip for the loaded champion's passive */
+    if (key === 'p' || key === '1') {
+        console.log(champions[champion]['abilities']['P'][0]['name'])
+        let passiveDetails = champions[champion]['abilities']['P'][0]['effects']
+        for (let passiveNote of passiveDetails) {
+            console.log(passiveNote['description'])
+        }
     }
 }
 
