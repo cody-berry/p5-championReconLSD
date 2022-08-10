@@ -138,6 +138,38 @@ function keyPressed() {
             console.log(passiveNote['description'])
         }
     }
+    /* display the tooltip for the loaded champion's Q ability */
+    if (key === 'q' || key === '2') {
+        console.log(champions[champion]['abilities']['Q'][0]['name'])
+        let QDetails = champions[champion]['abilities']['Q'][0]['effects']
+        for (let QNote of QDetails) {
+            console.log(QNote['description'])
+        }
+    }
+    /* display the tooltip for the loaded champion's W ability */
+    if (key === 'w' || key === '3') {
+        console.log(champions[champion]['abilities']['W'][0]['name'])
+        let WDetails = champions[champion]['abilities']['W'][0]['effects']
+        for (let WNote of WDetails) {
+            console.log(WNote['description'])
+        }
+    }
+    /* display the tooltip for the loaded champion's E ability */
+    if (key === 'e' || key === '4') {
+        console.log(champions[champion]['abilities']['E'][0]['name'])
+        let EDetails = champions[champion]['abilities']['E'][0]['effects']
+        for (let ENote of EDetails) {
+            console.log(ENote['description'])
+        }
+    }
+    /* display the tooltip for the loaded champion's R ability */
+    if (key === 'r' || key === '5') {
+        console.log(champions[champion]['abilities']['R'][0]['name'])
+        let RDetails = champions[champion]['abilities']['R'][0]['effects']
+        for (let RNote of RDetails) {
+            console.log(RNote['description'])
+        }
+    }
 }
 
 
