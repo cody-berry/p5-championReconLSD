@@ -144,6 +144,16 @@ function keyPressed() {
         let QDetails = champions[champion]['abilities']['Q'][0]['effects']
         for (let QNote of QDetails) {
             console.log(QNote['description'])
+
+            for (let levelStat of QNote['leveling']) {
+                let leveling = levelStat['attribute']
+
+                for (let modifier of levelStat['modifiers']['values']) {
+                    leveling += modifier + ' /'
+                }
+
+                print(leveling)
+            }
         }
     }
     /* display the tooltip for the loaded champion's W ability */
