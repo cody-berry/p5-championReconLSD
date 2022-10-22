@@ -34,11 +34,38 @@ function setup() {
 
     debugCorner = new CanvasDebugCorner(5)
 
-    for (let singleChampionData of Object.values(championData)) {
-        championNames.push(singleChampionData['name'])
+    for (let championName of Object.keys(championData)) {
+        championNames.push(championName)
     }
 
+    let importantChampionData = {}
 
+    for (let name of championNames) {
+        importantChampionData[name] = {
+            'P': [championData[name]['abilities']['P'][0]['name'], []],
+            'Q': [championData[name]['abilities']['Q'][0]['name'], []],
+            'W': [championData[name]['abilities']['W'][0]['name'], []],
+            'E': [championData[name]['abilities']['E'][0]['name'], []],
+            'R': [championData[name]['abilities']['R'][0]['name'], []],
+        }
+        for (let effect of championData[name]['abilities']['P'][0]['effects']) {
+            importantChampionData[name]['P'][1].push(effect['description'])
+        }
+        for (let effect of championData[name]['abilities']['Q'][0]['effects']) {
+            importantChampionData[name]['Q'][1].push(effect['description'])
+        }
+        for (let effect of championData[name]['abilities']['W'][0]['effects']) {
+            importantChampionData[name]['W'][1].push(effect['description'])
+        }
+        for (let effect of championData[name]['abilities']['E'][0]['effects']) {
+            importantChampionData[name]['E'][1].push(effect['description'])
+        }
+        for (let effect of championData[name]['abilities']['R'][0]['effects']) {
+            importantChampionData[name]['R'][1].push(effect['description'])
+        }
+    }
+
+    print(importantChampionData)
 }
 
 
