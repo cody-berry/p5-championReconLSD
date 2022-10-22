@@ -13,7 +13,7 @@ let championData /* loaded version of champions.json */
 let championNames = [] /* all champion names */
 let randomChampion
 let importantChampionData /* constantly updated to include everything we
- need to know for the ability */
+ need to know for all champions' info */
 
 
 function preload() {
@@ -37,6 +37,7 @@ function setup() {
 
     debugCorner = new CanvasDebugCorner(5)
 
+    // championData's JSON keys are the champion names
     for (let championName of Object.keys(championData)) {
         championNames.push(championName)
     }
@@ -45,35 +46,49 @@ function setup() {
 
     for (let name of championNames) {
         importantChampionData[name] = {
+            // the champion icon that you see when looking at the map in League.
             'icon': loadImage(championData[name]['icon']),
+            // the passive name and all descriptions
             'P': [championData[name]['abilities']['P'][0]['name'], [],
+                // the passive icon
                 loadImage(championData[name]['abilities']['P'][0]['icon'])],
+            // Q name, descriptions, and icon
             'Q': [championData[name]['abilities']['Q'][0]['name'], [],
                 loadImage(championData[name]['abilities']['Q'][0]['icon'])],
+            // W name, descriptions, and icon
             'W': [championData[name]['abilities']['W'][0]['name'], [],
                 loadImage(championData[name]['abilities']['W'][0]['icon'])],
+            // E name, descriptions, and icon
             'E': [championData[name]['abilities']['E'][0]['name'], [],
                 loadImage(championData[name]['abilities']['E'][0]['icon'])],
+            // R name, descriptions, and icon
             'R': [championData[name]['abilities']['R'][0]['name'], [],
                 loadImage(championData[name]['abilities']['R'][0]['icon'])],
         }
+        // adding descriptions to passive
         for (let effect of championData[name]['abilities']['P'][0]['effects']) {
             importantChampionData[name]['P'][1].push(effect['description'])
         }
+        // adding descriptions to Q
         for (let effect of championData[name]['abilities']['Q'][0]['effects']) {
             importantChampionData[name]['Q'][1].push(effect['description'])
         }
+        // adding descriptions to W
         for (let effect of championData[name]['abilities']['W'][0]['effects']) {
             importantChampionData[name]['W'][1].push(effect['description'])
         }
+        // adding descriptions to E
         for (let effect of championData[name]['abilities']['E'][0]['effects']) {
             importantChampionData[name]['E'][1].push(effect['description'])
         }
+        // adding descriptions to R
         for (let effect of championData[name]['abilities']['R'][0]['effects']) {
             importantChampionData[name]['R'][1].push(effect['description'])
         }
     }
 
+    // a random champion. championNames is a list, and random(), when given
+    // a single list, returns a random element of that list.
     randomChampion = random(championNames)
 
     print(importantChampionData, randomChampion)
@@ -90,6 +105,8 @@ function draw() {
 
     imageMode(CORNER)
 
+    // if the champion's icon exist, draw it at the max screen.
+    // the screen size is proportional to most champions' icons
     if (importantChampionData[randomChampion]['icon']) {
         image(importantChampionData[randomChampion]['icon'], 0, 0, width, height)
     }
