@@ -24,7 +24,7 @@ champion.json structure
 				flat
 				percent
 				perLevel
-				percenterLevel
+				percentPerLevel
 			}
 		}
 		roles: []
@@ -274,7 +274,7 @@ champion.json structure
 				width
 				angle
 				castTime
-				effectRAdius
+				effectRadius
 				targetRange
 			]
 		R: [
@@ -316,13 +316,13 @@ champion.json structure
 				}
 				targeting
 				affects
-				spellsieldable
+				spellshieldable
 				resource
 				damageType
-				spellEfects
+				spellEffects
 				projectile
 				onHitEffects
-				occurence
+				occurrence
 				notes
 				blurb
 				missileSpeed
@@ -335,11 +335,11 @@ champion.json structure
 				width
 				angle
 				castTime
-				effectRAdius
+				effectRadius
 				targetRange
 			]
 		}
-		releaseDae
+		releaseDate
 		releasePatch
 		patchLastChanged
 		price: {

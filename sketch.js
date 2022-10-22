@@ -93,10 +93,36 @@ function draw() {
 
     imageMode(CORNER)
 
-    // if the champion's icon exist, draw it at the max screen.
+    // if the champion's icon exist, draw it at the max screen size.
     // the screen size is proportional to most champions' icons
     if (importantChampionData[randomChampion]['icon']) {
         image(importantChampionData[randomChampion]['icon'], 0, 0, width, height)
+    }
+
+    // if the passive icon exists, draw it at its normal size in the bottom-left
+    // corner. the reason why we're not doing a for loop here is that I want
+    // to separate the passive from the other abilities.
+    if (importantChampionData[randomChampion]['P'][2]) {
+        // i want the bottom-left corner to be at 20, height-20. all icon
+        // heights and widths are 64.
+        image(importantChampionData[randomChampion]['P'][2], 20, height-84)
+
+    }
+
+    // set the number of icons we've gotten. based on that, we can tell what
+    // our starting x-coordinate should be.
+    let numIcons = 0
+
+    // for each icon...
+    for (let abilityPrefix of ['Q', 'W', 'E', 'R']) {
+        // check if it's loaded.
+        if (importantChampionData[randomChampion][abilityPrefix][2]) {
+            // for every icon, we move to the right by 80. then add 100 for
+            // spacing from the passive.
+            image(importantChampionData[randomChampion][abilityPrefix][2],
+                 numIcons*80 + 130, height-84)
+        }
+        numIcons++
     }
 
     if (frameCount > 3000)
