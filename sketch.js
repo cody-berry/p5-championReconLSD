@@ -2,6 +2,8 @@
  *  @author Cody
  *  @date 2022.
  *
+ *
+ *
  */
 
 let font
@@ -48,42 +50,28 @@ function setup() {
         importantChampionData[name] = {
             // the champion icon that you see when looking at the map in League.
             'icon': loadImage(championData[name]['icon']),
-            // the passive name and all descriptions
-            'P': [championData[name]['abilities']['P'][0]['name'], [],
-                // the passive icon
-                loadImage(championData[name]['abilities']['P'][0]['icon'])],
-            // Q name, descriptions, and icon
-            'Q': [championData[name]['abilities']['Q'][0]['name'], [],
-                loadImage(championData[name]['abilities']['Q'][0]['icon'])],
-            // W name, descriptions, and icon
-            'W': [championData[name]['abilities']['W'][0]['name'], [],
-                loadImage(championData[name]['abilities']['W'][0]['icon'])],
-            // E name, descriptions, and icon
-            'E': [championData[name]['abilities']['E'][0]['name'], [],
-                loadImage(championData[name]['abilities']['E'][0]['icon'])],
-            // R name, descriptions, and icon
-            'R': [championData[name]['abilities']['R'][0]['name'], [],
-                loadImage(championData[name]['abilities']['R'][0]['icon'])],
         }
-        // adding descriptions to passive
-        for (let effect of championData[name]['abilities']['P'][0]['effects']) {
-            importantChampionData[name]['P'][1].push(effect['description'])
+
+        // now what about the abilities, like 'P', 'Q', 'W', 'E', 'R'?
+        for (let abilityPrefix of ['P', 'Q', 'W', 'E', 'R']) {
+            // we add them here.
+            importantChampionData[name][abilityPrefix] = [
+                // the ability name
+                championData[name]['abilities'][abilityPrefix][0]['name'],
+                // the ability descriptions, which we will fill in later
+                [],
+                // the ability icon
+                loadImage(championData[name]['abilities'][abilityPrefix][0]['icon'])
+            ]
         }
-        // adding descriptions to Q
-        for (let effect of championData[name]['abilities']['Q'][0]['effects']) {
-            importantChampionData[name]['Q'][1].push(effect['description'])
-        }
-        // adding descriptions to W
-        for (let effect of championData[name]['abilities']['W'][0]['effects']) {
-            importantChampionData[name]['W'][1].push(effect['description'])
-        }
-        // adding descriptions to E
-        for (let effect of championData[name]['abilities']['E'][0]['effects']) {
-            importantChampionData[name]['E'][1].push(effect['description'])
-        }
-        // adding descriptions to R
-        for (let effect of championData[name]['abilities']['R'][0]['effects']) {
-            importantChampionData[name]['R'][1].push(effect['description'])
+
+        // adding descriptions to all abilities.
+        for (let abilityPrefix of ['P', 'Q', 'W', 'E', 'R']) {
+            // the ability descriptions are in the 'effects' section of each
+            // ability.
+            for (let effect of championData[name]['abilities'][abilityPrefix][0]['effects']) {
+                importantChampionData[name][abilityPrefix][1].push(effect['description'])
+            }
         }
     }
 
