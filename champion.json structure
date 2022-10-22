@@ -1,0 +1,384 @@
+champion.json structure
+
+{
+	championName: {
+		id
+		key
+		name
+		title
+		fullName
+		icon
+		resource
+		attackType
+		adaptiveType
+		stats: {
+			health: {
+				flat
+				percent
+				perLevel
+				percentPerLevel
+			}
+			:
+			:
+			urfShielding: {
+				flat
+				percent
+				perLevel
+				percenterLevel
+			}
+		}
+		roles: []
+		attributeRatings: {
+
+		}
+		abilities: {
+			P: [
+				{
+					name
+					icon
+					effects: [
+						{
+							'description'
+							'leveling': [
+								{
+									attribute
+									modifiers: [
+										{
+											values: []
+											units: []
+										}
+										:
+										:
+									]
+								}
+								:
+								:
+							]
+						}
+						:
+						:
+					]
+					cost
+					cooldown: {
+						modifiers: [
+							{
+								values: []
+								units: []
+							}
+						]
+					}
+					affectedByCdr
+				}
+				targeting
+				affects
+				spellsieldable
+				resource
+				damageType
+				spellEfects
+				projectile
+				onHitEffects
+				occurence
+				notes
+				blurb
+				missileSpeed
+				rechargeRate
+				collisionRadius
+				tetherRadius
+				onTargetCdStatic
+				innerRadius
+				speed
+				width
+				angle
+				castTime
+				effectRAdius
+				targetRange
+			]
+			Q: [
+				{
+					name
+					icon
+					effects: [
+						{
+							'description'
+							'leveling': [
+								{
+									attribute
+									modifiers: [
+										{
+											values: []
+											units: []
+										}
+										:
+										:
+									]
+								}
+								:
+								:
+							]
+						}
+						:
+						:
+					]
+					cost
+					cooldown: {
+						modifiers: [
+							{
+								values: []
+								units: []
+							}
+						]
+					}
+					affectedByCdr
+				}
+				targeting
+				affects
+				spellsieldable
+				resource
+				damageType
+				spellEfects
+				projectile
+				onHitEffects
+				occurence
+				notes
+				blurb
+				missileSpeed
+				rechargeRate
+				collisionRadius
+				tetherRadius
+				onTargetCdStatic
+				innerRadius
+				speed
+				width
+				angle
+				castTime
+				effectRAdius
+				targetRange
+			]
+		}
+		W: [
+				{
+					name
+					icon
+					effects: [
+						{
+							'description'
+							'leveling': [
+								{
+									attribute
+									modifiers: [
+										{
+											values: []
+											units: []
+										}
+										:
+										:
+									]
+								}
+								:
+								:
+							]
+						}
+						:
+						:
+					]
+					cost
+					cooldown: {
+						modifiers: [
+							{
+								values: []
+								units: []
+							}
+						]
+					}
+					affectedByCdr
+				}
+				targeting
+				affects
+				spellsieldable
+				resource
+				damageType
+				spellEfects
+				projectile
+				onHitEffects
+				occurence
+				notes
+				blurb
+				missileSpeed
+				rechargeRate
+				collisionRadius
+				tetherRadius
+				onTargetCdStatic
+				innerRadius
+				speed
+				width
+				angle
+				castTime
+				effectRAdius
+				targetRange
+			]
+		E: [
+				{
+					name
+					icon
+					effects: [
+						{
+							'description'
+							'leveling': [
+								{
+									attribute
+									modifiers: [
+										{
+											values: []
+											units: []
+										}
+										:
+										:
+									]
+								}
+								:
+								:
+							]
+						}
+						:
+						:
+					]
+					cost
+					cooldown: {
+						modifiers: [
+							{
+								values: []
+								units: []
+							}
+						]
+					}
+					affectedByCdr
+				}
+				targeting
+				affects
+				spellsieldable
+				resource
+				damageType
+				spellEfects
+				projectile
+				onHitEffects
+				occurence
+				notes
+				blurb
+				missileSpeed
+				rechargeRate
+				collisionRadius
+				tetherRadius
+				onTargetCdStatic
+				innerRadius
+				speed
+				width
+				angle
+				castTime
+				effectRAdius
+				targetRange
+			]
+		R: [
+				{
+					name
+					icon
+					effects: [
+						{
+							'description'
+							'leveling': [
+								{
+									attribute
+									modifiers: [
+										{
+											values: []
+											units: []
+										}
+										:
+										:
+									]
+								}
+								:
+								:
+							]
+						}
+						:
+						:
+					]
+					cost
+					cooldown: {
+						modifiers: [
+							{
+								values: []
+								units: []
+							}
+						]
+					}
+					affectedByCdr
+				}
+				targeting
+				affects
+				spellsieldable
+				resource
+				damageType
+				spellEfects
+				projectile
+				onHitEffects
+				occurence
+				notes
+				blurb
+				missileSpeed
+				rechargeRate
+				collisionRadius
+				tetherRadius
+				onTargetCdStatic
+				innerRadius
+				speed
+				width
+				angle
+				castTime
+				effectRAdius
+				targetRange
+			]
+		}
+		releaseDae
+		releasePatch
+		patchLastChanged
+		price: {
+			blueEssence
+			rp
+			saleRp
+		}
+		lore
+		skins: [
+			{
+				name
+				id
+				isBase
+				availability
+				formatName
+				lootEligible
+				cost
+				sale
+				distribution
+				rarity
+				chromas
+				lore
+				release
+				set: []
+				splashPath
+				uncenteredSplashPath
+				tilePath
+				loadScreenPath
+				loadScreenVintagePath
+				newEffects
+				newAnimation
+				newRecall
+				newVoice
+				newQuotes
+				voiceActor: []
+				splashArtist: []
+			}
+			:
+			:
+		]
+	}
+}
