@@ -11,6 +11,9 @@ let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
 let championData /* loaded version of champions.json */
 let championNames = [] /* all champion names */
+let randomChampion
+let importantChampionData /* constantly updated to include everything we
+ need to know for the ability */
 
 
 function preload() {
@@ -22,7 +25,7 @@ function preload() {
 
 
 function setup() {
-    let cnv = createCanvas(600, 300)
+    let cnv = createCanvas(700, 700)
     cnv.parent('#canvas')
     colorMode(HSB, 360, 100, 100, 100)
     textFont(font, 14)
@@ -38,15 +41,21 @@ function setup() {
         championNames.push(championName)
     }
 
-    let importantChampionData = {}
+    importantChampionData = {}
 
     for (let name of championNames) {
         importantChampionData[name] = {
-            'P': [championData[name]['abilities']['P'][0]['name'], []],
-            'Q': [championData[name]['abilities']['Q'][0]['name'], []],
-            'W': [championData[name]['abilities']['W'][0]['name'], []],
-            'E': [championData[name]['abilities']['E'][0]['name'], []],
-            'R': [championData[name]['abilities']['R'][0]['name'], []],
+            'icon': loadImage(championData[name]['icon']),
+            'P': [championData[name]['abilities']['P'][0]['name'], [],
+                loadImage(championData[name]['abilities']['P'][0]['icon'])],
+            'Q': [championData[name]['abilities']['Q'][0]['name'], [],
+                loadImage(championData[name]['abilities']['Q'][0]['icon'])],
+            'W': [championData[name]['abilities']['W'][0]['name'], [],
+                loadImage(championData[name]['abilities']['W'][0]['icon'])],
+            'E': [championData[name]['abilities']['E'][0]['name'], [],
+                loadImage(championData[name]['abilities']['E'][0]['icon'])],
+            'R': [championData[name]['abilities']['R'][0]['name'], [],
+                loadImage(championData[name]['abilities']['R'][0]['icon'])],
         }
         for (let effect of championData[name]['abilities']['P'][0]['effects']) {
             importantChampionData[name]['P'][1].push(effect['description'])
@@ -65,7 +74,9 @@ function setup() {
         }
     }
 
-    print(importantChampionData)
+    randomChampion = random(championNames)
+
+    print(importantChampionData, randomChampion)
 }
 
 
@@ -76,6 +87,12 @@ function draw() {
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
     debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
     debugCorner.showBottom()
+
+    imageMode(CORNER)
+
+    if (importantChampionData[randomChampion]['icon']) {
+        image(importantChampionData[randomChampion]['icon'], 0, 0, width, height)
+    }
 
     if (frameCount > 3000)
         noLoop()
