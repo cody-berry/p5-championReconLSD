@@ -9,12 +9,15 @@ let fixedWidthFont
 let variableWidthFont
 let instructions
 let debugCorner /* output debug text in the bottom left corner of the canvas */
+let championData /* loaded version of champions.json */
+let championNames = [] /* all champion names */
 
 
 function preload() {
     font = loadFont('data/consola.ttf')
     fixedWidthFont = loadFont('data/consola.ttf')
     variableWidthFont = loadFont('data/meiryo.ttf')
+    championData = loadJSON('champions.json')
 }
 
 
@@ -30,6 +33,12 @@ function setup() {
         numpad 1 → freeze sketch</pre>`)
 
     debugCorner = new CanvasDebugCorner(5)
+
+    for (let singleChampionData of Object.values(championData)) {
+        championNames.push(singleChampionData['name'])
+    }
+
+
 }
 
 
