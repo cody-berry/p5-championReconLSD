@@ -106,7 +106,6 @@ function draw() {
         // i want the bottom-left corner to be at 20, height-20. all icon
         // heights and widths are 64.
         image(importantChampionData[randomChampion]['P'][2], 20, height-84)
-
     }
 
     // set the number of icons we've gotten. based on that, we can tell what
@@ -129,6 +128,14 @@ function draw() {
         noLoop()
 }
 
+function printAbilityDetails(abilityPrefix) {
+    print(
+        // name
+        importantChampionData[randomChampion][abilityPrefix][0] + ": \n\n" +
+        // description
+        importantChampionData[randomChampion][abilityPrefix][1] + "\n"
+    )
+}
 
 function keyPressed() {
     /* stop sketch */
@@ -141,6 +148,18 @@ function keyPressed() {
     if (key === '`') { /* toggle debug corner visibility */
         debugCorner.visible = !debugCorner.visible
         console.log(`debugCorner visibility set to ${debugCorner.visible}`)
+    }
+
+    if (['P', '1', 'p'].includes(key)) {   // then research the passive
+        printAbilityDetails('P')
+    } if (['Q', '2', 'q'].includes(key)) { // then research Q
+        printAbilityDetails('Q')
+    } if (['W', '3', 'w'].includes(key)) { // then research W
+        printAbilityDetails('W')
+    } if (['E', '4', 'e'].includes(key)) { // then research E
+        printAbilityDetails('E')
+    } if (['R', '5', 'r'].includes(key)) { // then research R
+        printAbilityDetails('R')
     }
 }
 
