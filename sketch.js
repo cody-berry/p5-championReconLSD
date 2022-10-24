@@ -129,6 +129,14 @@ function draw() {
 }
 
 function printAbilityDetails(abilityPrefix) {
+    instructions.html(`<pre>
+        numpad 1 → freeze sketch
+        ${
+        // name plus colon and 2 newlines
+        importantChampionData[randomChampion][abilityPrefix][0] + ": \n\n" +
+        // description plus a newline
+        importantChampionData[randomChampion][abilityPrefix][1] + "\n"
+        }</pre>`)
     print(
         // name
         importantChampionData[randomChampion][abilityPrefix][0] + ": \n\n" +
