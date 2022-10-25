@@ -16,6 +16,7 @@ let championNames = [] /* all champion names */
 let randomChampion
 let importantChampionData /* constantly updated to include everything we
  need to know for all champions' info */
+let abilityInfo
 
 
 function preload() {
@@ -38,6 +39,10 @@ function setup() {
         numpad 1 → freeze sketch</pre>`)
 
     debugCorner = new CanvasDebugCorner(5)
+
+    /* initialize 'abilityInfo' div for writing later */
+    abilityInfo = select('#abilityInfo')
+    abilityInfo.html('press any ability to read ability info')
 
     // championData's JSON keys are the champion names
     for (let championName of Object.keys(championData)) {
@@ -129,20 +134,12 @@ function draw() {
 }
 
 function printAbilityDetails(abilityPrefix) {
-    instructions.html(`<pre>
-        numpad 1 → freeze sketch
-        ${
+    abilityInfo.html(`<pre>        ${
         // name plus colon and 2 newlines
         importantChampionData[randomChampion][abilityPrefix][0] + ": \n\n" +
         // description plus a newline
         importantChampionData[randomChampion][abilityPrefix][1] + "\n"
         }</pre>`)
-    print(
-        // name
-        importantChampionData[randomChampion][abilityPrefix][0] + ": \n\n" +
-        // description
-        importantChampionData[randomChampion][abilityPrefix][1] + "\n"
-    )
 }
 
 function keyPressed() {
