@@ -63,7 +63,8 @@ function setup() {
             importantChampionData[name][abilityPrefix] = [
                 // the ability name
                 championData[name]['abilities'][abilityPrefix][0]['name'],
-                // the ability descriptions, which we will fill in later
+                // the ability descriptions and leveling attributes, which we
+                // will fill in later
                 [],
                 // the ability icon
                 loadImage(championData[name]['abilities'][abilityPrefix][0]['icon'])
@@ -75,7 +76,9 @@ function setup() {
             // the ability descriptions are in the 'effects' section of each
             // ability.
             for (let effect of championData[name]['abilities'][abilityPrefix][0]['effects']) {
-                importantChampionData[name][abilityPrefix][1].push(effect['description'])
+                importantChampionData[name][abilityPrefix][1].push([effect['description'],
+                // and the leveling content!
+                effect['leveling']])
             }
         }
     }
@@ -134,12 +137,46 @@ function draw() {
 }
 
 function printAbilityDetails(abilityPrefix) {
-    abilityInfo.html(`<pre>        ${
+    let abilityDescriptions =
         // name plus colon and 2 newlines
-        importantChampionData[randomChampion][abilityPrefix][0] + ": \n\n" +
-        // description plus a newline
-        importantChampionData[randomChampion][abilityPrefix][1] + "\n"
-        }</pre>`)
+        "<span class='name'>" + importantChampionData[randomChampion][abilityPrefix][0] + "</span>\n\n"
+
+    let abilityLeveling = ''
+
+    // add descriptions and leveling stats
+    for (let descriptionAndLeveling of importantChampionData[randomChampion][abilityPrefix][1]) {
+        // add descriptions: description plus a newline
+        abilityDescriptions += descriptionAndLeveling[0] + "\n"
+
+        // add leveling stats
+        for (let levelingStat of descriptionAndLeveling[1]) {
+            abilityLeveling += levelingStat['attribute'] + ': '
+
+            // iterate through every leveling unit
+            for (let levelingAttribute of levelingStat['modifiers']) {
+                // now iterate through every leveling value
+
+                let lastLevelingValue = -1000
+
+                for (let levelingValue of levelingAttribute['values']) {
+                    if (levelingValue === lastLevelingValue) {
+                        break
+                    }
+                    abilityLeveling += levelingValue + '/'
+                    lastLevelingValue = levelingValue
+                }
+                abilityLeveling = abilityLeveling.substring(0, abilityLeveling.length - 1)
+                abilityLeveling += levelingAttribute['units'][0] + ' +'
+            }
+            abilityLeveling = abilityLeveling.substring(0, abilityLeveling.length - 1)
+
+            abilityLeveling += '\n'
+        }
+    }
+
+    abilityInfo.html(`<pre>${
+        abilityDescriptions + abilityLeveling
+    }</pre>`)
 }
 
 function keyPressed() {
