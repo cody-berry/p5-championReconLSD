@@ -64,8 +64,10 @@ function setup() {
                 // the ability name
                 championData[name]['abilities'][abilityPrefix][0]['name'],
                 // the ability descriptions and leveling attributes, which we
-                // will fill in later
+                // will fill in later. this includes cooldowns.
                 [],
+                // the cooldown
+                undefined,
                 // the ability icon
                 loadImage(championData[name]['abilities'][abilityPrefix][0]['icon'])
             ]
@@ -79,6 +81,13 @@ function setup() {
                 importantChampionData[name][abilityPrefix][1].push([effect['description'],
                 // and the leveling content!
                 effect['leveling']])
+            }
+
+            // the cooldown of the ability is in the 'cooldown' section.
+            if (championData[name]['abilities']
+                [abilityPrefix][0]['cooldown']) {
+                importantChampionData[name][abilityPrefix][2] = championData[name]['abilities']
+                    [abilityPrefix][0]['cooldown']['modifiers'][0]
             }
         }
     }
@@ -110,10 +119,10 @@ function draw() {
     // if the passive icon exists, draw it at its normal size in the bottom-left
     // corner. the reason why we're not doing a for loop here is that I want
     // to separate the passive from the other abilities.
-    if (importantChampionData[randomChampion]['P'][2]) {
+    if (importantChampionData[randomChampion]['P'][3]) {
         // i want the bottom-left corner to be at 20, height-20. all icon
         // heights and widths are 64.
-        image(importantChampionData[randomChampion]['P'][2], 20, height-84)
+        image(importantChampionData[randomChampion]['P'][3], 20, height-84)
     }
 
     // set the number of icons we've gotten. based on that, we can tell what
@@ -123,10 +132,10 @@ function draw() {
     // for each icon...
     for (let abilityPrefix of ['Q', 'W', 'E', 'R']) {
         // check if it's loaded.
-        if (importantChampionData[randomChampion][abilityPrefix][2]) {
+        if (importantChampionData[randomChampion][abilityPrefix][3]) {
             // for every icon, we move to the right by 80. then add 100 for
             // spacing from the passive.
-            image(importantChampionData[randomChampion][abilityPrefix][2],
+            image(importantChampionData[randomChampion][abilityPrefix][3],
                  numIcons*80 + 130, height-84)
         }
         numIcons++
@@ -137,9 +146,11 @@ function draw() {
 }
 
 function printAbilityDetails(abilityPrefix) {
-    let abilityDescriptions =
-        // name plus colon and 2 newlines
-        "<span class='name'>" + importantChampionData[randomChampion][abilityPrefix][0] + "</span>\n\n"
+    let abilityName =
+        // name in a span with a class of 'name'
+        "<span class='name'>" + importantChampionData[randomChampion][abilityPrefix][0] + "</span>   "
+
+    let abilityDescriptions = ''
 
     let abilityLeveling = ''
 
@@ -174,7 +185,24 @@ function printAbilityDetails(abilityPrefix) {
         }
     }
 
+    let abilityCooldown = ''
+    // iterate through every leveling value only if the cooldown exists
+    let lastLevelingValue = -1000
+    if (importantChampionData[randomChampion][abilityPrefix][2] !== undefined) {
+        abilityCooldown += 'Cooldown: '
+        for (let levelingValue of importantChampionData[randomChampion][abilityPrefix][2]['values']) {
+            if (levelingValue === lastLevelingValue) {
+                break
+            }
+            abilityCooldown += levelingValue + 's/'
+            lastLevelingValue = levelingValue
+        }
+    }
+    abilityCooldown = abilityCooldown.substring(0, abilityCooldown.length - 1)
+    abilityCooldown += '\n\n\n'
+
     abilityInfo.html(`<pre>${
+        abilityName + abilityCooldown + 
         abilityDescriptions + abilityLeveling
     }</pre>`)
 }

@@ -132,10 +132,10 @@ champion.json structure
 				}
 				targeting
 				affects
-				spellsieldable
+				spellshieldable
 				resource
 				damageType
-				spellEfects
+				spellEffects
 				projectile
 				onHitEffects
 				occurence
