@@ -12,7 +12,7 @@ body {
 #ins, #abilityInfo {
     color: gainsboro;
     padding: 2px 4px 2px 4px;
-    font-family: consolas;
+    font-family: consolas, serif;
     font-size: 12px;
     height: auto;
     width: 700px;
@@ -21,9 +21,10 @@ body {
 #abilityInfo {
     overflow: auto;
     border: white 1px outset;
+    font-weight: 400;
 }
 
 #abilityInfo .name {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 550;
 }

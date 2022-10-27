@@ -103,11 +103,6 @@ function setup() {
 function draw() {
     background(234, 34, 24)
 
-    /* debugCorner needs to be last so its z-index is highest */
-    debugCorner.setText(`frameCount: ${frameCount}`, 2)
-    debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
-    debugCorner.showBottom()
-
     imageMode(CORNER)
 
     // if the champion's icon exist, draw it at the max screen size.
@@ -141,6 +136,11 @@ function draw() {
         numIcons++
     }
 
+    /* debugCorner needs to be last so its z-index is highest */
+    debugCorner.setText(`frameCount: ${frameCount}`, 2)
+    debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
+    debugCorner.showBottom()
+
     if (frameCount > 3000)
         noLoop()
 }
@@ -157,7 +157,7 @@ function printAbilityDetails(abilityPrefix) {
     // add descriptions and leveling stats
     for (let descriptionAndLeveling of importantChampionData[randomChampion][abilityPrefix][1]) {
         // add descriptions: description plus a newline
-        abilityDescriptions += descriptionAndLeveling[0] + "\n"
+        abilityDescriptions += descriptionAndLeveling[0] + " "
 
         // add leveling stats
         for (let levelingStat of descriptionAndLeveling[1]) {
@@ -194,16 +194,21 @@ function printAbilityDetails(abilityPrefix) {
             if (levelingValue === lastLevelingValue) {
                 break
             }
-            abilityCooldown += levelingValue + 's/'
+            abilityCooldown += levelingValue + '/'
             lastLevelingValue = levelingValue
         }
     }
     abilityCooldown = abilityCooldown.substring(0, abilityCooldown.length - 1)
-    abilityCooldown += '\n\n\n'
+
+    if (importantChampionData[randomChampion][abilityPrefix][2] !== undefined) {
+        abilityCooldown += 's'
+    }
+
+    abilityCooldown += '\n\n'
 
     abilityInfo.html(`<pre>${
         abilityName + abilityCooldown + 
-        abilityDescriptions + abilityLeveling
+        abilityDescriptions + '\n' + abilityLeveling
     }</pre>`)
 }
 
