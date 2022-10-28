@@ -58,7 +58,15 @@ champion.json structure
 						:
 						:
 					]
-					cost
+					cost: (null)/(number)/({
+					    modifiers: [
+					        {
+                        		values: []
+                        		units: []
+                        	}
+                        ]
+					}
+					)
 					cooldown: {
 						modifiers: [
 							{
@@ -66,32 +74,32 @@ champion.json structure
 								units: []
 							}
 						]
+					    affectedByCdr
 					}
-					affectedByCdr
+				    targeting
+				    affects
+				    spellsieldable
+				    resource
+				    damageType
+				    spellEffects
+				    projectile
+				    onHitEffects
+				    occurence
+				    notes
+				    blurb
+				    missileSpeed
+				    rechargeRate
+				    collisionRadius
+				    tetherRadius
+				    onTargetCdStatic
+				    innerRadius
+				    speed
+				    width
+				    angle
+				    castTime
+				    effectRadius
+				    targetRange
 				}
-				targeting
-				affects
-				spellsieldable
-				resource
-				damageType
-				spellEfects
-				projectile
-				onHitEffects
-				occurence
-				notes
-				blurb
-				missileSpeed
-				rechargeRate
-				collisionRadius
-				tetherRadius
-				onTargetCdStatic
-				innerRadius
-				speed
-				width
-				angle
-				castTime
-				effectRAdius
-				targetRange
 			]
 			Q: [
 				{

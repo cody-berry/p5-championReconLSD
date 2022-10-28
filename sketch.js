@@ -69,11 +69,14 @@ function setup() {
                 // the cooldown
                 undefined,
                 // the ability icon
-                loadImage(championData[name]['abilities'][abilityPrefix][0]['icon'])
+                loadImage(championData[name]['abilities'][abilityPrefix][0]['icon']),
+                // non-null properties
+                {}
             ]
         }
 
-        // adding descriptions to all abilities.
+        // adding descriptions/leveling/cooldown/non-null properties to all
+        // abilities.
         for (let abilityPrefix of ['P', 'Q', 'W', 'E', 'R']) {
             // the ability descriptions are in the 'effects' section of each
             // ability.
@@ -88,6 +91,15 @@ function setup() {
                 [abilityPrefix][0]['cooldown']) {
                 importantChampionData[name][abilityPrefix][2] = championData[name]['abilities']
                     [abilityPrefix][0]['cooldown']['modifiers'][0]
+            }
+
+            // add non-null properties other than 'effects', 'name', 'icon',
+            // 'cooldown', 'notes', and 'blurb', which pretty much has to be
+            // non-null.
+            for (let property of Object.keys(championData[name]['abilities'][abilityPrefix][0])) {
+                if ((!['effects', 'name', 'icon', 'cooldown', 'notes', 'blurb'].includes(property)) && (championData[name]['abilities'][abilityPrefix][0][property])) {
+                    importantChampionData[name][abilityPrefix][4][property] = championData[name]['abilities'][abilityPrefix][0][property]
+                }
             }
         }
     }
@@ -204,10 +216,38 @@ function printAbilityDetails(abilityPrefix) {
         abilityCooldown += 's'
     }
 
-    abilityCooldown += '\n\n'
+    abilityCooldown += '   '
+
+    let abilityNonNullProperties = ''
+
+    // add every non null property in importantChampionData
+    for (let nonNullProperty of Object.keys(importantChampionData[randomChampion][abilityPrefix][4])) {
+        // oh, and put the non-null property key in an understandable
+        // English form first.
+        // make the first letter capital. the process involves getting the
+        // first character, then transforming it into uppercase. Then add
+        // the rest of the letters. It makes sense.
+        let nonNullPropertyFirstLetterUppercase = nonNullProperty.charAt(0).toUpperCase() + nonNullProperty.slice(1)
+
+        // then, for every uppercase letter other than the first, make it a
+        // space plus the lowercase version of the uppercase letter.
+        let understandablePropertyName = nonNullPropertyFirstLetterUppercase[0]
+
+        for (let letter of nonNullPropertyFirstLetterUppercase.slice(1)) {
+            if (letter.toLowerCase() === letter) { // it's lowercase
+                understandablePropertyName += letter
+            } else { // it's uppercase
+                understandablePropertyName += ' ' + letter.toLowerCase()
+            }
+        }
+
+        abilityNonNullProperties += `${understandablePropertyName}: ${importantChampionData[randomChampion][abilityPrefix][4][nonNullProperty]}   `
+    }
+
+    abilityNonNullProperties += '\n\n'
 
     abilityInfo.html(`<pre>${
-        abilityName + abilityCooldown + 
+        abilityName + abilityCooldown + abilityNonNullProperties +
         abilityDescriptions + '\n' + abilityLeveling
     }</pre>`)
 }
