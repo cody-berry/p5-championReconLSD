@@ -100,251 +100,292 @@ champion.json structure
 				    effectRadius
 				    targetRange
 				}
+				:  for ability modes
+				:
 			]
 			Q: [
-				{
-					name
-					icon
-					effects: [
-						{
-							'description'
-							'leveling': [
-								{
-									attribute
-									modifiers: [
-										{
-											values: []
-											units: []
-										}
-										:
-										:
-									]
-								}
-								:
-								:
-							]
-						}
-						:
-						:
-					]
-					cost
-					cooldown: {
-						modifiers: [
-							{
-								values: []
-								units: []
-							}
-						]
-					}
-					affectedByCdr
-				}
-				targeting
-				affects
-				spellshieldable
-				resource
-				damageType
-				spellEffects
-				projectile
-				onHitEffects
-				occurence
-				notes
-				blurb
-				missileSpeed
-				rechargeRate
-				collisionRadius
-				tetherRadius
-				onTargetCdStatic
-				innerRadius
-				speed
-				width
-				angle
-				castTime
-				effectRAdius
-				targetRange
-			]
+               	{
+           		name
+           		icon
+           		effects: [
+           			{
+           				'description'
+           				'leveling': [
+           					{
+           						attribute
+           						modifiers: [
+           							{
+           								values
+           								units:
+           							}
+           							:
+           							:
+           						]
+           					}
+           					:
+           					:
+           				]
+           			}
+           			:
+           			:
+           		]
+           		cost: (null)/(number)/({
+           		    modifiers: [
+           		        {
+                    		values: []
+                    		units: []
+                    	}
+                    ]
+           		}
+           		)
+           		cooldown: {
+           			modifiers: [
+           				{
+           					values: []
+           					units: []
+           				}
+           			]
+           		    affectedByCdr
+           		}
+           	    targeting
+           	    affects
+           	    spellsieldable
+           	    resource
+           	    damageType
+           	    spellEffects
+           	    projectile
+           	    onHitEffects
+           	    occurence
+           	    notes
+           	    blurb
+           	    missileSpeed
+           	    rechargeRate
+           	    collisionRadius
+           	    tetherRadius
+           	    onTargetCdStatic
+           	    innerRadius
+           	    speed
+           	    width
+           	    angle
+           	    castTime
+           	    effectRadius
+           	    targetRange
+           	}
+           	:  for ability modes
+           	:
 		}
 		W: [
-				{
-					name
-					icon
-					effects: [
-						{
-							'description'
-							'leveling': [
-								{
-									attribute
-									modifiers: [
-										{
-											values: []
-											units: []
-										}
-										:
-										:
-									]
-								}
-								:
-								:
-							]
-						}
-						:
-						:
-					]
-					cost
-					cooldown: {
-						modifiers: [
-							{
-								values: []
-								units: []
-							}
-						]
-					}
-					affectedByCdr
-				}
-				targeting
-				affects
-				spellsieldable
-				resource
-				damageType
-				spellEfects
-				projectile
-				onHitEffects
-				occurence
-				notes
-				blurb
-				missileSpeed
-				rechargeRate
-				collisionRadius
-				tetherRadius
-				onTargetCdStatic
-				innerRadius
-				speed
-				width
-				angle
-				castTime
-				effectRAdius
-				targetRange
-			]
+           	{
+        	name
+        	icon
+        	effects: [
+        		{
+        			'description'
+        			'leveling': [
+        				{
+        					attribute
+        					modifiers: [
+        						{
+        							values
+        							units:
+        						}
+        						:
+        						:
+        					]
+        				}
+        				:
+        				:
+        			]
+        		}
+        		:
+        		:
+        	]
+        	cost: (null)/(number)/({
+        	    modifiers: [
+        	        {
+                		values: []
+                		units: []
+                	}
+                ]
+        	}
+        	)
+        	cooldown: {
+        		modifiers: [
+        			{
+        				values: []
+        				units: []
+        			}
+        		]
+        	    affectedByCdr
+        	}
+            targeting
+            affects
+            spellsieldable
+            resource
+            damageType
+            spellEffects
+            projectile
+            onHitEffects
+            occurence
+            notes
+            blurb
+            missileSpeed
+            rechargeRate
+            collisionRadius
+            tetherRadius
+            onTargetCdStatic
+            innerRadius
+            speed
+            width
+            angle
+            castTime
+            effectRadius
+            targetRange
+        }
+        :  for ability modes
+        :
+        ]
 		E: [
-				{
-					name
-					icon
-					effects: [
-						{
-							'description'
-							'leveling': [
-								{
-									attribute
-									modifiers: [
-										{
-											values: []
-											units: []
-										}
-										:
-										:
-									]
-								}
-								:
-								:
-							]
-						}
-						:
-						:
-					]
-					cost
-					cooldown: {
-						modifiers: [
-							{
-								values: []
-								units: []
-							}
-						]
-					}
-					affectedByCdr
-				}
-				targeting
-				affects
-				spellsieldable
-				resource
-				damageType
-				spellEfects
-				projectile
-				onHitEffects
-				occurence
-				notes
-				blurb
-				missileSpeed
-				rechargeRate
-				collisionRadius
-				tetherRadius
-				onTargetCdStatic
-				innerRadius
-				speed
-				width
-				angle
-				castTime
-				effectRadius
-				targetRange
+           	{
+        	name
+        	icon
+        	effects: [
+        		{
+        			'description'
+        			'leveling': [
+        				{
+        					attribute
+        					modifiers: [
+        						{
+        							values
+        							units:
+        						}
+        						:
+        						:
+        					]
+        				}
+        				:
+        				:
+        			]
+        		}
+        		:
+        		:
+        	]
+        	cost: (null)/(number)/({
+        	    modifiers: [
+        	        {
+                		values: []
+                		units: []
+                	}
+                ]
+        	}
+        	)
+        	cooldown: {
+        		modifiers: [
+        			{
+        				values: []
+        				units: []
+        			}
+        		]
+        	    affectedByCdr
+        	}
+            targeting
+            affects
+            spellsieldable
+            resource
+            damageType
+            spellEffects
+            projectile
+            onHitEffects
+            occurence
+            notes
+            blurb
+            missileSpeed
+            rechargeRate
+            collisionRadius
+            tetherRadius
+            onTargetCdStatic
+            innerRadius
+            speed
+            width
+            angle
+            castTime
+            effectRadius
+            targetRange
+        }
+        :  for ability modes
+        :
 			]
 		R: [
-				{
-					name
-					icon
-					effects: [
-						{
-							'description'
-							'leveling': [
-								{
-									attribute
-									modifiers: [
-										{
-											values: []
-											units: []
-										}
-										:
-										:
-									]
-								}
-								:
-								:
-							]
-						}
-						:
-						:
-					]
-					cost
-					cooldown: {
-						modifiers: [
-							{
-								values: []
-								units: []
-							}
-						]
-					}
-					affectedByCdr
-				}
-				targeting
-				affects
-				spellshieldable
-				resource
-				damageType
-				spellEffects
-				projectile
-				onHitEffects
-				occurrence
-				notes
-				blurb
-				missileSpeed
-				rechargeRate
-				collisionRadius
-				tetherRadius
-				onTargetCdStatic
-				innerRadius
-				speed
-				width
-				angle
-				castTime
-				effectRadius
-				targetRange
+           	{
+        	name
+        	icon
+        	effects: [
+        		{
+        			'description'
+        			'leveling': [
+        				{
+        					attribute
+        					modifiers: [
+        						{
+        							values
+        							units:
+        						}
+        						:
+        						:
+        					]
+        				}
+        				:
+        				:
+        			]
+        		}
+        		:
+        		:
+        	]
+        	cost: (null)/(number)/({
+        	    modifiers: [
+        	        {
+                		values: []
+                		units: []
+                	}
+                ]
+        	}
+        	)
+        	cooldown: {
+        		modifiers: [
+        			{
+        				values: []
+        				units: []
+        			}
+        		]
+        	    affectedByCdr
+        	}
+            targeting
+            affects
+            spellsieldable
+            resource
+            damageType
+            spellEffects
+            projectile
+            onHitEffects
+            occurence
+            notes
+            blurb
+            missileSpeed
+            rechargeRate
+            collisionRadius
+            tetherRadius
+            onTargetCdStatic
+            innerRadius
+            speed
+            width
+            angle
+            castTime
+            effectRadius
+            targetRange
+        }
+        :  for ability modes
+        :
 			]
 		}
 		releaseDate

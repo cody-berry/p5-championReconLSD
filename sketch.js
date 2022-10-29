@@ -17,7 +17,8 @@ let randomChampion
 let importantChampionData /* constantly updated to include everything we
  need to know for all champions' info */
 let abilityInfo
-
+/* what is the ability we've selected? */
+let selectedAbility
 
 function preload() {
     font = loadFont('data/consola.ttf')
@@ -153,7 +154,20 @@ function draw() {
     if (importantChampionData[randomChampion]['P'][3]) {
         // i want the bottom-left corner to be at 20, height-20. all icon
         // heights and widths are 64.
-        image(importantChampionData[randomChampion]['P'][3], 20, height-84)
+        // however, if we're selecting this ability, we display it up a bit
+        // from where it's supposed to be and stroke. this is why we
+        // noStroke after.
+        if (selectedAbility === 'P') {
+            noFill()
+            stroke(0, 0, 100)
+            strokeWeight(2)
+            rect(20, height-104, 84, height-40)
+            image(importantChampionData[randomChampion]['P'][3], 20, height-104)
+        } else {
+            image(importantChampionData[randomChampion]['P'][3], 20, height-84)
+        }
+
+        noStroke()
     }
 
     // set the number of icons we've gotten. based on that, we can tell what
@@ -164,10 +178,21 @@ function draw() {
     for (let abilityPrefix of ['Q', 'W', 'E', 'R']) {
         // check if it's loaded.
         if (importantChampionData[randomChampion][abilityPrefix][3]) {
-            // for every icon, we move to the right by 80. then add 100 for
+            // for every icon, we move to the right by 80. then add 140 for
             // spacing from the passive.
-            image(importantChampionData[randomChampion][abilityPrefix][3],
-                numIcons*80 + 130, height-84)
+            // however, if we're selecting this ability, we display it up a bit
+            // from where it's supposed to be and stroke. this is why we
+            // noStroke after.
+            if (selectedAbility === abilityPrefix) {
+                noFill()
+                stroke(0, 0, 100)
+                strokeWeight(2)
+                rect(numIcons * 80 + 140, height - 104, numIcons * 80 + 204, height - 40)
+                image(importantChampionData[randomChampion][abilityPrefix][3], numIcons * 80 + 140, height - 104)
+            } else {
+                image(importantChampionData[randomChampion][abilityPrefix][3],
+                    numIcons * 80 + 140, height - 84)
+            }
         }
         numIcons++
     }
@@ -176,9 +201,6 @@ function draw() {
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
     debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
     debugCorner.showBottom()
-
-    if (frameCount > 3000)
-        noLoop()
 }
 
 function printAbilityDetails(abilityPrefix) {
@@ -206,15 +228,20 @@ function printAbilityDetails(abilityPrefix) {
                 // make sure to add colors using '<span>'s
                 let modifierSpanClass = undefined
                 switch (levelingAttribute['units'][0]) {
+                    // AP-related. note that no % bonus AP is to be found.
                     case '% AP':
                         modifierSpanClass = 'ap'
                         break
+
+                    // AD-related
                     case '% AD':
                         modifierSpanClass = 'ad'
                         break
                     case '% bonus AD':
                         modifierSpanClass = 'ad'
                         break
+
+                    // health-related content
                     case '% maximum health':
                         modifierSpanClass = 'hp'
                         break
@@ -230,6 +257,8 @@ function printAbilityDetails(abilityPrefix) {
                     case '% of missing health':
                         modifierSpanClass = 'hp'
                         break
+
+                    // armor-related
                     case '% armor':
                         modifierSpanClass = 'armor'
                         break
@@ -239,6 +268,9 @@ function printAbilityDetails(abilityPrefix) {
                     case '% total armor':
                         modifierSpanClass = 'armor'
                         break
+
+                    // magic-resistance related. note that no '% magic
+                    // resistance' is to be found.
                     case '% bonus magic resistance':
                         modifierSpanClass = 'mr'
                         break
@@ -354,14 +386,19 @@ function keyPressed() {
     }
 
     if (['P', '1', 'p'].includes(key)) {   // then research the passive
+        selectedAbility = 'P'
         printAbilityDetails('P')
     } if (['Q', '2', 'q'].includes(key)) { // then research Q
+        selectedAbility = 'Q'
         printAbilityDetails('Q')
     } if (['W', '3', 'w'].includes(key)) { // then research W
+        selectedAbility = 'W'
         printAbilityDetails('W')
     } if (['E', '4', 'e'].includes(key)) { // then research E
+        selectedAbility = 'E'
         printAbilityDetails('E')
     } if (['R', '5', 'r'].includes(key)) { // then research R
+        selectedAbility = 'R'
         printAbilityDetails('R')
     }
 }
