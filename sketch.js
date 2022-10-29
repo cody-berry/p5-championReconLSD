@@ -82,8 +82,8 @@ function setup() {
             // ability.
             for (let effect of championData[name]['abilities'][abilityPrefix][0]['effects']) {
                 importantChampionData[name][abilityPrefix][1].push([effect['description'],
-                // and the leveling content!
-                effect['leveling']])
+                    // and the leveling content!
+                    effect['leveling']])
             }
 
             // the cooldown of the ability is in the 'cooldown' section.
@@ -98,7 +98,31 @@ function setup() {
             // non-null.
             for (let property of Object.keys(championData[name]['abilities'][abilityPrefix][0])) {
                 if ((!['effects', 'name', 'icon', 'cooldown', 'notes', 'blurb'].includes(property)) && (championData[name]['abilities'][abilityPrefix][0][property])) {
-                    importantChampionData[name][abilityPrefix][4][property] = championData[name]['abilities'][abilityPrefix][0][property]
+                    // if the property is NOT the cost:
+                    if (property !== 'cost') {
+                        importantChampionData[name][abilityPrefix][4][property] = championData[name]['abilities'][abilityPrefix][0][property]
+                    } else { // if the property is the cost
+                        // if the cost is a leveling thing:
+                        if (Object.keys(championData[name]['abilities'][abilityPrefix][0]['cost']).includes('modifiers')) {
+                            // we basically do the same things we do for
+                            // 'cooldown', if you haven't already seen that.
+                            importantChampionData[name][abilityPrefix][4][property] = ''
+                            let lastLevelingValue = -1000
+                            for (let levelingValue of championData[name]['abilities'][abilityPrefix][0]['cost']['modifiers'][0]['values']) {
+                                if (levelingValue === lastLevelingValue) {
+                                    break
+                                }
+                                importantChampionData[name][abilityPrefix][4][property] += levelingValue + '/'
+                                lastLevelingValue = levelingValue
+                            }
+                            importantChampionData[name][abilityPrefix][4][property] = importantChampionData[name][abilityPrefix][4][property].substring(0, importantChampionData[name][abilityPrefix][4][property].length - 1)
+                        }
+                        // otherwise:
+                        else {
+                            // we simply treat 'cost' as a normal property
+                            importantChampionData[name][abilityPrefix][4][property] = championData[name]['abilities'][abilityPrefix][0][property]
+                        }
+                    }
                 }
             }
         }
@@ -143,7 +167,7 @@ function draw() {
             // for every icon, we move to the right by 80. then add 100 for
             // spacing from the passive.
             image(importantChampionData[randomChampion][abilityPrefix][3],
-                 numIcons*80 + 130, height-84)
+                numIcons*80 + 130, height-84)
         }
         numIcons++
     }
@@ -175,8 +199,62 @@ function printAbilityDetails(abilityPrefix) {
         for (let levelingStat of descriptionAndLeveling[1]) {
             abilityLeveling += levelingStat['attribute'] + ': '
 
+            let isFirstLevelingAttribute = true
+
             // iterate through every leveling unit
             for (let levelingAttribute of levelingStat['modifiers']) {
+                // make sure to add colors using '<span>'s
+                let modifierSpanClass = undefined
+                switch (levelingAttribute['units'][0]) {
+                    case '% AP':
+                        modifierSpanClass = 'ap'
+                        break
+                    case '% AD':
+                        modifierSpanClass = 'ad'
+                        break
+                    case '% bonus AD':
+                        modifierSpanClass = 'ad'
+                        break
+                    case '% maximum health':
+                        modifierSpanClass = 'hp'
+                        break
+                    case '% of target\'s maximum health':
+                        modifierSpanClass = 'hp'
+                        break
+                    case '%  of target\'s maximum health':
+                        modifierSpanClass = 'hp'
+                        break
+                    case '% missing health':
+                        modifierSpanClass = 'hp'
+                        break
+                    case '% of missing health':
+                        modifierSpanClass = 'hp'
+                        break
+                    case '% armor':
+                        modifierSpanClass = 'armor'
+                        break
+                    case '% bonus armor':
+                        modifierSpanClass = 'armor'
+                        break
+                    case '% total armor':
+                        modifierSpanClass = 'armor'
+                        break
+                    case '% bonus magic resistance':
+                        modifierSpanClass = 'mr'
+                        break
+                    case '% total magic resistance':
+                        modifierSpanClass = 'mr'
+                        break
+                }
+
+                if (modifierSpanClass) {
+                    abilityLeveling += `<span class=${modifierSpanClass}>`
+                }
+
+                if (!isFirstLevelingAttribute) {
+                    abilityLeveling += ' (+ '
+                }
+
                 // now iterate through every leveling value
 
                 let lastLevelingValue = -1000
@@ -189,11 +267,21 @@ function printAbilityDetails(abilityPrefix) {
                     lastLevelingValue = levelingValue
                 }
                 abilityLeveling = abilityLeveling.substring(0, abilityLeveling.length - 1)
-                abilityLeveling += levelingAttribute['units'][0] + ' +'
-            }
-            abilityLeveling = abilityLeveling.substring(0, abilityLeveling.length - 1)
 
-            abilityLeveling += '\n'
+                abilityLeveling += `${levelingAttribute['units'][0]}`
+
+                if (!isFirstLevelingAttribute) {
+                    abilityLeveling += ')'
+                }
+
+                if (modifierSpanClass) {
+                    abilityLeveling += `</span>`
+                }
+
+                isFirstLevelingAttribute = false
+            }
+
+            abilityLeveling += '<br>'
         }
     }
 
@@ -216,9 +304,7 @@ function printAbilityDetails(abilityPrefix) {
         abilityCooldown += 's'
     }
 
-    abilityCooldown += '   '
-
-    let abilityNonNullProperties = ''
+    let abilityNonNullProperties = ', '
 
     // add every non null property in importantChampionData
     for (let nonNullProperty of Object.keys(importantChampionData[randomChampion][abilityPrefix][4])) {
@@ -241,15 +327,17 @@ function printAbilityDetails(abilityPrefix) {
             }
         }
 
-        abilityNonNullProperties += `${understandablePropertyName}: ${importantChampionData[randomChampion][abilityPrefix][4][nonNullProperty]}   `
+        abilityNonNullProperties += `${understandablePropertyName}: ${importantChampionData[randomChampion][abilityPrefix][4][nonNullProperty]}, `
     }
 
-    abilityNonNullProperties += '\n\n'
+    abilityNonNullProperties = abilityNonNullProperties.substring(0, abilityNonNullProperties.length - 2)
 
-    abilityInfo.html(`<pre>${
+    abilityNonNullProperties += '<br><br>'
+
+    abilityInfo.html(`${
         abilityName + abilityCooldown + abilityNonNullProperties +
-        abilityDescriptions + '\n' + abilityLeveling
-    }</pre>`)
+        abilityDescriptions + '<br><br>' + abilityLeveling
+    }`)
 }
 
 function keyPressed() {

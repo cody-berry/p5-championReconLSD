@@ -7,6 +7,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
 
 #ins, #abilityInfo {
@@ -19,7 +20,7 @@ body {
 }
 
 #abilityInfo {
-    overflow: auto;
+    overflow-wrap: break-word;
     border: white 1px outset;
     font-weight: 400;
 }
@@ -28,3 +29,29 @@ body {
     font-size: 20px;
     font-weight: 550;
 }
+
+#abilityInfo .ad {
+    color: #ffae1a;
+}
+
+#abilityInfo .ap {
+    color: #7366ff;
+}
+
+#abilityInfo .hp {
+    color: #69e1a5;
+}
+
+#abilityInfo .armor {
+    color: #1affff;
+}
+
+#abilityInfo .mr {
+    color: #ffff1a;
+}
+
+
+
+
+
+
