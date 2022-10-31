@@ -226,7 +226,7 @@ function draw() {
     /* debugCorner needs to be last so its z-index is highest */
     debugCorner.setText(`frameCount: ${frameCount}`, 2)
     debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
-    debugCorner.showBottom()
+    debugCorner.showTop()
 }
 
 function printAbilityDetails(abilityPrefix) {
