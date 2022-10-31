@@ -32,7 +32,7 @@ function setup() {
     let cnv = createCanvas(700, 700)
     cnv.parent('#canvas')
     colorMode(HSB, 360, 100, 100, 100)
-    textFont(font, 14)
+    textFont(font, 20)
 
     /* initialize instruction div */
     instructions = select('#ins')
@@ -139,7 +139,7 @@ function setup() {
 
 function draw() {
     background(234, 34, 24)
-
+    textFont(font, 20)
     imageMode(CORNER)
 
     // if the champion's icon exist, draw it at the max screen size.
@@ -162,12 +162,24 @@ function draw() {
             stroke(0, 0, 100)
             strokeWeight(2)
             rect(20, height-104, 84, height-40)
+            stroke(0, 0, 100, 75)
+            rect(19, height-105, 85, height-39)
+            stroke(0, 0, 100, 50)
+            rect(18, height-106, 86, height-38)
+            stroke(0, 0, 100, 33)
+            rect(17, height-107, 87, height-37)
+            stroke(0, 0, 100, 11)
+            rect(16, height-108, 88, height-36)
             image(importantChampionData[randomChampion]['P'][3], 20, height-104)
         } else {
             image(importantChampionData[randomChampion]['P'][3], 20, height-84)
         }
 
         noStroke()
+
+        fill(0, 0, 100)
+        textAlign(LEFT, BOTTOM)
+        text('P', 42, height - 150)
     }
 
     // set the number of icons we've gotten. based on that, we can tell what
@@ -187,12 +199,26 @@ function draw() {
                 noFill()
                 stroke(0, 0, 100)
                 strokeWeight(2)
-                rect(numIcons * 80 + 140, height - 104, numIcons * 80 + 204, height - 40)
+                rect(numIcons * 80 + 140, height-104, numIcons*80+204, height-40)
+                stroke(0, 0, 100, 75)
+                rect(numIcons * 80 + 139, height-105, numIcons*80+205, height-39)
+                stroke(0, 0, 100, 50)
+                rect(numIcons * 80 + 138, height-106, numIcons*80+206, height-38)
+                stroke(0, 0, 100, 33)
+                rect(numIcons * 80 + 137, height-107, numIcons*80+207, height-37)
+                stroke(0, 0, 100, 11)
+                rect(numIcons * 80 + 136, height-108, numIcons*80+208, height-36)
                 image(importantChampionData[randomChampion][abilityPrefix][3], numIcons * 80 + 140, height - 104)
             } else {
                 image(importantChampionData[randomChampion][abilityPrefix][3],
                     numIcons * 80 + 140, height - 84)
             }
+
+            noStroke()
+
+            fill(0, 0, 100)
+            textAlign(LEFT, BOTTOM)
+            text(abilityPrefix, numIcons*80 + 162, height - 150)
         }
         numIcons++
     }
