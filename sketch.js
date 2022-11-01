@@ -208,7 +208,8 @@ function setup() {
 
     // a random champion. championNames is a list, and random(), when given
     // a single list, returns a random element of that list.
-    randomChampion = random(championNames)
+    // randomChampion = random(championNames)
+    randomChampion = 'Jayce'
 
     print(importantChampionData, randomChampion)
 }
@@ -438,7 +439,7 @@ function printAbilityDetails(abilityPrefix) {
     let lastLevelingValue = -1000
     if (importantChampionData[randomChampion][abilityPrefix][2] !== undefined) {
         abilityCooldown += 'Cooldown: '
-        for (let levelingValue of importantChampionData[randomChampion][abilityPrefix][2]['values']) {
+        for (let levelingValue of importantChampionData[randomChampion][abilityPrefix][0][2]['values']) {
             if (levelingValue === lastLevelingValue) {
                 break
             }
@@ -448,7 +449,7 @@ function printAbilityDetails(abilityPrefix) {
     }
     abilityCooldown = abilityCooldown.substring(0, abilityCooldown.length - 1)
 
-    if (importantChampionData[randomChampion][abilityPrefix][2] !== undefined) {
+    if (importantChampionData[randomChampion][abilityPrefix][0][2] !== undefined) {
         abilityCooldown += 's'
     }
 
@@ -484,8 +485,178 @@ function printAbilityDetails(abilityPrefix) {
 
     abilityInfo.html(`${
         abilityName + abilityCooldown + abilityNonNullProperties +
-        abilityDescriptions + '<br><br>' + abilityLeveling + '<br><hr><br>'
+        abilityDescriptions + '<br><br>' + abilityLeveling + '<br><br>'
     }`)
+
+    if (importantChampionData[randomChampion][abilityPrefix][1]) {
+        let abilityName =
+            // name in a span with a class of 'name'
+            "<span class=\"name\">" +
+            importantChampionData[randomChampion][abilityPrefix][1][0] + "</span>   "
+
+        let abilityDescriptions = ''
+
+        let abilityLeveling = ''
+
+        // add descriptions and leveling stats
+        for (let descriptionAndLeveling of importantChampionData[randomChampion][abilityPrefix][1][1]) {
+            // add descriptions: description plus a newline
+            abilityDescriptions += descriptionAndLeveling[0] + " "
+
+            // add leveling stats
+            for (let levelingStat of descriptionAndLeveling[1]) {
+                abilityLeveling += levelingStat['attribute'] + ': '
+
+                let isFirstLevelingAttribute = true
+
+                // iterate through every leveling unit
+                for (let levelingAttribute of levelingStat['modifiers']) {
+                    // make sure to add colors using '<span>'s
+                    let modifierSpanClass = undefined
+                    switch (levelingAttribute['units'][0]) {
+                        // AP-related. note that no % bonus AP is to be found.
+                        case '% AP':
+                            modifierSpanClass = 'ap'
+                            break
+
+                        // AD-related
+                        case '% AD':
+                            modifierSpanClass = 'ad'
+                            break
+                        case '% bonus AD':
+                            modifierSpanClass = 'ad'
+                            break
+
+                        // health-related content
+                        case '% maximum health':
+                            modifierSpanClass = 'hp'
+                            break
+                        case '% of target\'s maximum health':
+                            modifierSpanClass = 'hp'
+                            break
+                        case '%  of target\'s maximum health':
+                            modifierSpanClass = 'hp'
+                            break
+                        case '% missing health':
+                            modifierSpanClass = 'hp'
+                            break
+                        case '% of missing health':
+                            modifierSpanClass = 'hp'
+                            break
+
+                        // armor-related
+                        case '% armor':
+                            modifierSpanClass = 'armor'
+                            break
+                        case '% bonus armor':
+                            modifierSpanClass = 'armor'
+                            break
+                        case '% total armor':
+                            modifierSpanClass = 'armor'
+                            break
+
+                        // magic-resistance related. note that no '% magic
+                        // resistance' is to be found.
+                        case '% bonus magic resistance':
+                            modifierSpanClass = 'mr'
+                            break
+                        case '% total magic resistance':
+                            modifierSpanClass = 'mr'
+                            break
+                    }
+
+                    if (modifierSpanClass) {
+                        abilityLeveling += `<span class=${modifierSpanClass}>`
+                    }
+
+                    if (!isFirstLevelingAttribute) {
+                        abilityLeveling += ' (+ '
+                    }
+
+                    // now iterate through every leveling value
+
+                    let lastLevelingValue = -1000
+
+                    for (let levelingValue of levelingAttribute['values']) {
+                        if (levelingValue === lastLevelingValue) {
+                            break
+                        }
+                        abilityLeveling += levelingValue + '/'
+                        lastLevelingValue = levelingValue
+                    }
+                    abilityLeveling = abilityLeveling.substring(0, abilityLeveling.length - 1)
+
+                    abilityLeveling += `${levelingAttribute['units'][0]}`
+
+                    if (!isFirstLevelingAttribute) {
+                        abilityLeveling += ')'
+                    }
+
+                    if (modifierSpanClass) {
+                        abilityLeveling += `</span>`
+                    }
+
+                    isFirstLevelingAttribute = false
+                }
+
+                abilityLeveling += '<br>'
+            }
+        }
+
+        let abilityCooldown = ''
+        // iterate through every leveling value only if the cooldown exists
+        let lastLevelingValue = -1000
+        if (importantChampionData[randomChampion][abilityPrefix][1][2] !== undefined) {
+            abilityCooldown += 'Cooldown: '
+            for (let levelingValue of importantChampionData[randomChampion][abilityPrefix][1][2]['values']) {
+                if (levelingValue === lastLevelingValue) {
+                    break
+                }
+                abilityCooldown += levelingValue + '/'
+                lastLevelingValue = levelingValue
+            }
+        }
+        abilityCooldown = abilityCooldown.substring(0, abilityCooldown.length - 1)
+
+        if (importantChampionData[randomChampion][abilityPrefix][2] !== undefined) {
+            abilityCooldown += 's'
+        }
+
+        let abilityNonNullProperties = ', '
+
+        // add every non null property in importantChampionData
+        for (let nonNullProperty of Object.keys(importantChampionData[randomChampion][abilityPrefix][1][4])) {
+            // oh, and put the non-null property key in an understandable
+            // English form first.
+            // make the first letter capital. the process involves getting the
+            // first character, then transforming it into uppercase. Then add
+            // the rest of the letters. It makes sense.
+            let nonNullPropertyFirstLetterUppercase = nonNullProperty.charAt(0).toUpperCase() + nonNullProperty.slice(1)
+
+            // then, for every uppercase letter other than the first, make it a
+            // space plus the lowercase version of the uppercase letter.
+            let understandablePropertyName = nonNullPropertyFirstLetterUppercase[0]
+
+            for (let letter of nonNullPropertyFirstLetterUppercase.slice(1)) {
+                if (letter.toLowerCase() === letter) { // it's lowercase
+                    understandablePropertyName += letter
+                } else { // it's uppercase
+                    understandablePropertyName += ' ' + letter.toLowerCase()
+                }
+            }
+
+            abilityNonNullProperties += `${understandablePropertyName}: ${importantChampionData[randomChampion][abilityPrefix][1][4][nonNullProperty]}, `
+        }
+
+        abilityNonNullProperties = abilityNonNullProperties.substring(0, abilityNonNullProperties.length - 2)
+
+        abilityNonNullProperties += '<br><br>'
+
+        abilityInfo.html(`${
+            '<hr>' + abilityName + abilityCooldown + abilityNonNullProperties +
+            abilityDescriptions + '<br><br>' + abilityLeveling
+        }`, true)
+    }
 }
 
 function keyPressed() {
