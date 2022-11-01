@@ -62,18 +62,38 @@ function setup() {
         for (let abilityPrefix of ['P', 'Q', 'W', 'E', 'R']) {
             // we add them here.
             importantChampionData[name][abilityPrefix] = [
-                // the ability name
-                championData[name]['abilities'][abilityPrefix][0]['name'],
-                // the ability descriptions and leveling attributes, which we
-                // will fill in later. this includes cooldowns.
-                [],
-                // the cooldown
-                undefined,
-                // the ability icon
-                loadImage(championData[name]['abilities'][abilityPrefix][0]['icon']),
-                // non-null properties
-                {}
+                [
+                    // the ability name for the first mode
+                    championData[name]['abilities'][abilityPrefix][0]['name'],
+                    // the ability descriptions and leveling attributes, which we
+                    // will fill in later. this includes cooldowns.
+                    [],
+                    // the cooldown for the first mode
+                    undefined,
+                    // the ability icon
+                    loadImage(championData[name]['abilities'][abilityPrefix][0]['icon']),
+                    // non-null properties
+                    {}
+                ]
             ]
+
+            if (championData[name]['abilities'][abilityPrefix][1]) {
+                importantChampionData[name][abilityPrefix].push(
+                    [
+                        // the ability name for the second mode
+                        championData[name]['abilities'][abilityPrefix][1]['name'],
+                        // the ability descriptions and leveling attributes, which we
+                        // will fill in later. this includes cooldowns.
+                        [],
+                        // the cooldown for the second mode
+                        undefined,
+                        // the ability icon
+                        loadImage(championData[name]['abilities'][abilityPrefix][0]['icon']),
+                        // non-null properties
+                        {}
+                    ]
+                )
+            }
         }
 
         // adding descriptions/leveling/cooldown/non-null properties to all
@@ -82,7 +102,7 @@ function setup() {
             // the ability descriptions are in the 'effects' section of each
             // ability.
             for (let effect of championData[name]['abilities'][abilityPrefix][0]['effects']) {
-                importantChampionData[name][abilityPrefix][1].push([effect['description'],
+                importantChampionData[name][abilityPrefix][0][1].push([effect['description'],
                     // and the leveling content!
                     effect['leveling']])
             }
@@ -90,7 +110,7 @@ function setup() {
             // the cooldown of the ability is in the 'cooldown' section.
             if (championData[name]['abilities']
                 [abilityPrefix][0]['cooldown']) {
-                importantChampionData[name][abilityPrefix][2] = championData[name]['abilities']
+                importantChampionData[name][abilityPrefix][0][2] = championData[name]['abilities']
                     [abilityPrefix][0]['cooldown']['modifiers'][0]
             }
 
@@ -101,27 +121,84 @@ function setup() {
                 if ((!['effects', 'name', 'icon', 'cooldown', 'notes', 'blurb'].includes(property)) && (championData[name]['abilities'][abilityPrefix][0][property])) {
                     // if the property is NOT the cost:
                     if (property !== 'cost') {
-                        importantChampionData[name][abilityPrefix][4][property] = championData[name]['abilities'][abilityPrefix][0][property]
+                        importantChampionData[name][abilityPrefix][0][4][property] = championData[name]['abilities'][abilityPrefix][0][property]
                     } else { // if the property is the cost
                         // if the cost is a leveling thing:
                         if (Object.keys(championData[name]['abilities'][abilityPrefix][0]['cost']).includes('modifiers')) {
                             // we basically do the same things we do for
                             // 'cooldown', if you haven't already seen that.
-                            importantChampionData[name][abilityPrefix][4][property] = ''
+                            importantChampionData[name][abilityPrefix][0][4][property] = ''
                             let lastLevelingValue = -1000
-                            for (let levelingValue of championData[name]['abilities'][abilityPrefix][0]['cost']['modifiers'][0]['values']) {
+                            for (let levelingValue of championData[name]['abilities'][abilityPrefix]
+                                [0]['cost']['modifiers'][0]['values']) {
                                 if (levelingValue === lastLevelingValue) {
                                     break
                                 }
-                                importantChampionData[name][abilityPrefix][4][property] += levelingValue + '/'
+                                importantChampionData[name][abilityPrefix][0][4][property] += levelingValue + '/'
                                 lastLevelingValue = levelingValue
                             }
-                            importantChampionData[name][abilityPrefix][4][property] = importantChampionData[name][abilityPrefix][4][property].substring(0, importantChampionData[name][abilityPrefix][4][property].length - 1)
+                            importantChampionData[name][abilityPrefix][0][4][property] =
+                                importantChampionData[name][abilityPrefix][0][4][property].substring(0, importantChampionData[name][abilityPrefix][0][4][property].length - 1)
                         }
                         // otherwise:
                         else {
                             // we simply treat 'cost' as a normal property
-                            importantChampionData[name][abilityPrefix][4][property] = championData[name]['abilities'][abilityPrefix][0][property]
+                            importantChampionData[name][abilityPrefix][0][4][property] =
+                                championData[name]['abilities'][abilityPrefix][0][property]
+                        }
+                    }
+                }
+            }
+
+            // now for the second mode.
+            if (importantChampionData[name][abilityPrefix][1]) {
+                // the ability descriptions are in the 'effects' section of each
+                // ability.
+                for (let effect of championData[name]['abilities'][abilityPrefix][1]['effects']) {
+                    importantChampionData[name][abilityPrefix][1][1].push([effect['description'],
+                        // and the leveling content!
+                        effect['leveling']])
+                }
+
+                // the cooldown of the ability is in the 'cooldown' section.
+                if (championData[name]['abilities']
+                    [abilityPrefix][1]['cooldown']) {
+                    importantChampionData[name][abilityPrefix][1][2] = championData[name]['abilities']
+                        [abilityPrefix][1]['cooldown']['modifiers'][0]
+                }
+
+                // add non-null properties other than 'effects', 'name', 'icon',
+                // 'cooldown', 'notes', and 'blurb', which pretty much has to be
+                // non-null.
+                for (let property of Object.keys(championData[name]['abilities'][abilityPrefix][1])) {
+                    if ((!['effects', 'name', 'icon', 'cooldown', 'notes', 'blurb'].includes(property)) && (championData[name]['abilities'][abilityPrefix][1][property])) {
+                        // if the property is NOT the cost:
+                        if (property !== 'cost') {
+                            importantChampionData[name][abilityPrefix][1][4][property] = championData[name]['abilities'][abilityPrefix][1][property]
+                        } else { // if the property is the cost
+                            // if the cost is a leveling thing:
+                            if (Object.keys(championData[name]['abilities'][abilityPrefix][1]['cost']).includes('modifiers')) {
+                                // we basically do the same things we do for
+                                // 'cooldown', if you haven't already seen that.
+                                importantChampionData[name][abilityPrefix][1][4][property] = ''
+                                let lastLevelingValue = -1000
+                                for (let levelingValue of championData[name]['abilities'][abilityPrefix]
+                                    [1]['cost']['modifiers'][0]['values']) {
+                                    if (levelingValue === lastLevelingValue) {
+                                        break
+                                    }
+                                    importantChampionData[name][abilityPrefix][1][4][property] += levelingValue + '/'
+                                    lastLevelingValue = levelingValue
+                                }
+                                importantChampionData[name][abilityPrefix][1][4][property] =
+                                    importantChampionData[name][abilityPrefix][1][4][property].substring(0, importantChampionData[name][abilityPrefix][1][4][property].length - 1)
+                            }
+                            // otherwise:
+                            else {
+                                // we simply treat 'cost' as a normal property
+                                importantChampionData[name][abilityPrefix][1][4][property] =
+                                    championData[name]['abilities'][abilityPrefix][1][property]
+                            }
                         }
                     }
                 }
@@ -168,8 +245,14 @@ function draw() {
             rect(18, height-106, 86, height-38)
             stroke(0, 0, 100, 33)
             rect(17, height-107, 87, height-37)
-            stroke(0, 0, 100, 11)
+            stroke(0, 0, 100, 22)
             rect(16, height-108, 88, height-36)
+            stroke(0, 0, 100, 16)
+            rect(15, height-109, 89, height-35)
+            stroke(0, 0, 100, 10)
+            rect(14, height-110, 90, height-34)
+            stroke(0, 0, 100, 5)
+            rect(13, height-111, 91, height-33)
             image(importantChampionData[randomChampion]['P'][3], 20, height-104)
         } else {
             image(importantChampionData[randomChampion]['P'][3], 20, height-84)
@@ -206,8 +289,14 @@ function draw() {
                 rect(numIcons * 80 + 138, height-106, numIcons*80+206, height-38)
                 stroke(0, 0, 100, 33)
                 rect(numIcons * 80 + 137, height-107, numIcons*80+207, height-37)
-                stroke(0, 0, 100, 11)
+                stroke(0, 0, 100, 22)
                 rect(numIcons * 80 + 136, height-108, numIcons*80+208, height-36)
+                stroke(0, 0, 100, 16)
+                rect(numIcons * 80 + 135, height-109, numIcons*80+209, height-35)
+                stroke(0, 0, 100, 10)
+                rect(numIcons * 80 + 134, height-110, numIcons*80+210, height-34)
+                stroke(0, 0, 100, 5)
+                rect(numIcons * 80 + 133, height-111, numIcons*80+211, height-33)
                 image(importantChampionData[randomChampion][abilityPrefix][3], numIcons * 80 + 140, height - 104)
             } else {
                 image(importantChampionData[randomChampion][abilityPrefix][3],
@@ -232,14 +321,15 @@ function draw() {
 function printAbilityDetails(abilityPrefix) {
     let abilityName =
         // name in a span with a class of 'name'
-        "<span class='name'>" + importantChampionData[randomChampion][abilityPrefix][0] + "</span>   "
+        "<span class=\"name\">" +
+        importantChampionData[randomChampion][abilityPrefix][0][0] + "</span>   "
 
     let abilityDescriptions = ''
 
     let abilityLeveling = ''
 
     // add descriptions and leveling stats
-    for (let descriptionAndLeveling of importantChampionData[randomChampion][abilityPrefix][1]) {
+    for (let descriptionAndLeveling of importantChampionData[randomChampion][abilityPrefix][0][1]) {
         // add descriptions: description plus a newline
         abilityDescriptions += descriptionAndLeveling[0] + " "
 
@@ -365,7 +455,7 @@ function printAbilityDetails(abilityPrefix) {
     let abilityNonNullProperties = ', '
 
     // add every non null property in importantChampionData
-    for (let nonNullProperty of Object.keys(importantChampionData[randomChampion][abilityPrefix][4])) {
+    for (let nonNullProperty of Object.keys(importantChampionData[randomChampion][abilityPrefix][0][4])) {
         // oh, and put the non-null property key in an understandable
         // English form first.
         // make the first letter capital. the process involves getting the
@@ -385,7 +475,7 @@ function printAbilityDetails(abilityPrefix) {
             }
         }
 
-        abilityNonNullProperties += `${understandablePropertyName}: ${importantChampionData[randomChampion][abilityPrefix][4][nonNullProperty]}, `
+        abilityNonNullProperties += `${understandablePropertyName}: ${importantChampionData[randomChampion][abilityPrefix][0][4][nonNullProperty]}, `
     }
 
     abilityNonNullProperties = abilityNonNullProperties.substring(0, abilityNonNullProperties.length - 2)
@@ -394,7 +484,7 @@ function printAbilityDetails(abilityPrefix) {
 
     abilityInfo.html(`${
         abilityName + abilityCooldown + abilityNonNullProperties +
-        abilityDescriptions + '<br><br>' + abilityLeveling
+        abilityDescriptions + '<br><br>' + abilityLeveling + '<br><hr><br>'
     }`)
 }
 
