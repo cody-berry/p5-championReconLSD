@@ -57,8 +57,8 @@ function setup() {
 
     // a random champion. championNames is a list, and random(), when given
     // a single list, returns a random element of that list.
-    // randomChampion = random(championNames)
-    randomChampion = 'Nidalee'
+    randomChampion = random(championNames)
+    // randomChampion = 'Nidalee'
 
     importantChampionData = {}
 
@@ -85,8 +85,7 @@ function setup() {
                 createVideo(
                     abilityLinkVideoStart + championData[randomChampion]['id'].toString().padStart(4, '0') +
                     '/ability_' + championData[randomChampion]['id'].toString().padStart(4, '0')
-                    + '_' + abilityPrefix + '1.webm',
-                    turnAutoPlayOff
+                    + '_' + abilityPrefix + '1.webm'
                 )
             ]
         ]
@@ -231,6 +230,11 @@ function draw() {
         image(importantChampionData[randomChampion]['icon'], 0, 0, width, height)
     }
 
+    // display any video of the current sleected ability in place of the icon
+    if (selectedAbility) {
+        image(importantChampionData[randomChampion][selectedAbility][0][5], 0, 0, width, height)
+    }
+
     // if the passive icon exists, draw it at its normal size in the bottom-left
     // corner. the reason why we're not doing a for loop here is that I want
     // to separate the passive from the other abilities.
@@ -325,6 +329,9 @@ function draw() {
 }
 
 function printAbilityDetails(abilityPrefix) {
+    // play the video as well
+    importantChampionData[randomChampion][abilityPrefix][0][5].play()
+
     let abilityName =
         // name in a span with a class of 'name'
         "<span class=\"name\">" +
