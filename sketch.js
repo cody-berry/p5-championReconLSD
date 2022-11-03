@@ -27,6 +27,11 @@ function preload() {
     championData = loadJSON('champions.json')
 }
 
+// ability video link is:
+// https://d28xe8vt774jo5.cloudfront.net/champion-abilities/{champion ID extended to 4 digits}/ability_{champion ID extended to 4 digits}_{ability prefix}{ability mode number}.webm
+// if ability mode number is 1, then the video will display both modes of
+// the ability being used.
+let abilityLinkVideoStart = 'https://d28xe8vt774jo5.cloudfront.net/champion-abilities/'
 
 function setup() {
     let cnv = createCanvas(700, 700)
@@ -73,7 +78,13 @@ function setup() {
                     // the ability icon
                     loadImage(championData[name]['abilities'][abilityPrefix][0]['icon']),
                     // non-null properties
-                    {}
+                    {},
+                    createVideo(
+                        abilityLinkVideoStart + championData[name]['id'].toString().padStart(4, '0') +
+                        '/ability_' + championData[name]['id'].toString().padStart(4, '0')
+                        + '_' + abilityPrefix + '1.webm',
+                        turnAutoPlayOff
+                    )
                 ]
             ]
 
@@ -90,7 +101,13 @@ function setup() {
                         // the ability icon
                         loadImage(championData[name]['abilities'][abilityPrefix][0]['icon']),
                         // non-null properties
-                        {}
+                        {},
+                        createVideo(
+                            abilityLinkVideoStart + championData[name]['id'].toString().padStart(4, '0') +
+                            '/ability_' + championData[name]['id'].toString().padStart(4, '0')
+                            + '_' + abilityPrefix + '2.webm',
+                            turnAutoPlayOff
+                        )
                     ]
                 )
             }
@@ -209,11 +226,16 @@ function setup() {
     // a random champion. championNames is a list, and random(), when given
     // a single list, returns a random element of that list.
     // randomChampion = random(championNames)
-    randomChampion = 'Jayce'
+    randomChampion = 'Nidalee'
 
     print(importantChampionData, randomChampion)
 }
 
+// sets the autoplay of a video to be 'false'. Warning: Only use this as a
+// callback function.
+function turnAutoPlayOff(abilityVideo) {
+    abilityVideo.autoplay(false)
+}
 
 function draw() {
     background(234, 34, 24)
@@ -254,9 +276,9 @@ function draw() {
             rect(14, height-110, 90, height-34)
             stroke(0, 0, 100, 5)
             rect(13, height-111, 91, height-33)
-            image(importantChampionData[randomChampion]['P'][3], 20, height-104)
+            image(importantChampionData[randomChampion][0]['P'][3], 20, height-104)
         } else {
-            image(importantChampionData[randomChampion]['P'][3], 20, height-84)
+            image(importantChampionData[randomChampion][0]['P'][3], 20, height-84)
         }
 
         noStroke()
@@ -298,9 +320,9 @@ function draw() {
                 rect(numIcons * 80 + 134, height-110, numIcons*80+210, height-34)
                 stroke(0, 0, 100, 5)
                 rect(numIcons * 80 + 133, height-111, numIcons*80+211, height-33)
-                image(importantChampionData[randomChampion][abilityPrefix][3], numIcons * 80 + 140, height - 104)
+                image(importantChampionData[randomChampion][abilityPrefix][0][3], numIcons * 80 + 140, height - 104)
             } else {
-                image(importantChampionData[randomChampion][abilityPrefix][3],
+                image(importantChampionData[randomChampion][abilityPrefix][0][3],
                     numIcons * 80 + 140, height - 84)
             }
 
