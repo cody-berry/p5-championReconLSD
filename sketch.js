@@ -55,167 +55,161 @@ function setup() {
         championNames.push(championName)
     }
 
+    // a random champion. championNames is a list, and random(), when given
+    // a single list, returns a random element of that list.
+    // randomChampion = random(championNames)
+    randomChampion = 'Nidalee'
+
     importantChampionData = {}
 
-    for (let name of championNames) {
-        importantChampionData[name] = {
-            // the champion icon that you see when looking at the map in League.
-            'icon': loadImage(championData[name]['icon']),
-        }
-
-        // now what about the abilities, like 'P', 'Q', 'W', 'E', 'R'?
-        for (let abilityPrefix of ['P', 'Q', 'W', 'E', 'R']) {
-            // we add them here.
-            importantChampionData[name][abilityPrefix] = [
+    importantChampionData[randomChampion] = {
+        // the champion icon that you see when looking at the map in League.
+        'icon': loadImage(championData[randomChampion]['icon']),
+    }
+    // now what about the abilities, like 'P', 'Q', 'W', 'E', 'R'?
+    for (let abilityPrefix of ['P', 'Q', 'W', 'E', 'R']) {
+        // we add them here.
+        importantChampionData[randomChampion][abilityPrefix] = [
+            [
+                // the ability name for the first mode
+                championData[randomChampion]['abilities'][abilityPrefix][0]['name'],
+                // the ability descriptions and leveling attributes, which we
+                // will fill in later. this includes cooldowns.
+                [],
+                // the cooldown for the first mode
+                undefined,
+                // the ability icon
+                loadImage(championData[randomChampion]['abilities'][abilityPrefix][0]['icon']),
+                // non-null properties
+                {},
+                createVideo(
+                    abilityLinkVideoStart + championData[randomChampion]['id'].toString().padStart(4, '0') +
+                    '/ability_' + championData[randomChampion]['id'].toString().padStart(4, '0')
+                    + '_' + abilityPrefix + '1.webm',
+                    turnAutoPlayOff
+                )
+            ]
+        ]
+        if (championData[randomChampion]['abilities'][abilityPrefix][1]) {
+            importantChampionData[randomChampion][abilityPrefix].push(
                 [
-                    // the ability name for the first mode
-                    championData[name]['abilities'][abilityPrefix][0]['name'],
+                    // the ability name for the second mode
+                    championData[randomChampion]['abilities'][abilityPrefix][1]['name'],
                     // the ability descriptions and leveling attributes, which we
                     // will fill in later. this includes cooldowns.
                     [],
-                    // the cooldown for the first mode
+                    // the cooldown for the second mode
                     undefined,
                     // the ability icon
-                    loadImage(championData[name]['abilities'][abilityPrefix][0]['icon']),
+                    loadImage(championData[randomChampion]['abilities'][abilityPrefix][0]['icon']),
                     // non-null properties
                     {},
                     createVideo(
-                        abilityLinkVideoStart + championData[name]['id'].toString().padStart(4, '0') +
-                        '/ability_' + championData[name]['id'].toString().padStart(4, '0')
-                        + '_' + abilityPrefix + '1.webm',
-                        turnAutoPlayOff
+                        abilityLinkVideoStart + championData[randomChampion]['id'].toString().padStart(4, '0') +
+                        '/ability_' + championData[randomChampion]['id'].toString().padStart(4, '0')
+                        + '_' + abilityPrefix + '2.webm'
                     )
                 ]
-            ]
-
-            if (championData[name]['abilities'][abilityPrefix][1]) {
-                importantChampionData[name][abilityPrefix].push(
-                    [
-                        // the ability name for the second mode
-                        championData[name]['abilities'][abilityPrefix][1]['name'],
-                        // the ability descriptions and leveling attributes, which we
-                        // will fill in later. this includes cooldowns.
-                        [],
-                        // the cooldown for the second mode
-                        undefined,
-                        // the ability icon
-                        loadImage(championData[name]['abilities'][abilityPrefix][0]['icon']),
-                        // non-null properties
-                        {},
-                        createVideo(
-                            abilityLinkVideoStart + championData[name]['id'].toString().padStart(4, '0') +
-                            '/ability_' + championData[name]['id'].toString().padStart(4, '0')
-                            + '_' + abilityPrefix + '2.webm',
-                            turnAutoPlayOff
-                        )
-                    ]
-                )
+            )
+        }
+    }
+    // adding descriptions/leveling/cooldown/non-null properties to all
+    // abilities.
+    for (let abilityPrefix of ['P', 'Q', 'W', 'E', 'R']) {
+        // the ability descriptions are in the 'effects' section of each
+        // ability.
+        for (let effect of championData[randomChampion]['abilities'][abilityPrefix][0]['effects']) {
+            importantChampionData[randomChampion][abilityPrefix][0][1].push([effect['description'],
+                // and the leveling content!
+                effect['leveling']])
+        }
+        // the cooldown of the ability is in the 'cooldown' section.
+        if (championData[randomChampion]['abilities']
+            [abilityPrefix][0]['cooldown']) {
+            importantChampionData[randomChampion][abilityPrefix][0][2] = championData[randomChampion]['abilities']
+                [abilityPrefix][0]['cooldown']['modifiers'][0]
+        }
+        // add non-null properties other than 'effects', 'name', 'icon',
+        // 'cooldown', 'notes', and 'blurb', which pretty much has to be
+        // non-null.
+        for (let property of Object.keys(championData[randomChampion]['abilities'][abilityPrefix][0])) {
+            if ((!['effects', 'name', 'icon', 'cooldown', 'notes', 'blurb'].includes(property)) && (championData[randomChampion]['abilities'][abilityPrefix][0][property])) {
+                // if the property is NOT the cost:
+                if (property !== 'cost') {
+                    importantChampionData[randomChampion][abilityPrefix][0][4][property] = championData[randomChampion]['abilities'][abilityPrefix][0][property]
+                } else { // if the property is the cost
+                    // if the cost is a leveling thing:
+                    if (Object.keys(championData[randomChampion]['abilities'][abilityPrefix][0]['cost']).includes('modifiers')) {
+                        // we basically do the same things we do for
+                        // 'cooldown', if you haven't already seen that.
+                        importantChampionData[randomChampion][abilityPrefix][0][4][property] = ''
+                        let lastLevelingValue = -1000
+                        for (let levelingValue of championData[randomChampion]['abilities'][abilityPrefix]
+                            [0]['cost']['modifiers'][0]['values']) {
+                            if (levelingValue === lastLevelingValue) {
+                                break
+                            }
+                            importantChampionData[randomChampion][abilityPrefix][0][4][property] += levelingValue + '/'
+                            lastLevelingValue = levelingValue
+                        }
+                        importantChampionData[randomChampion][abilityPrefix][0][4][property] =
+                            importantChampionData[randomChampion][abilityPrefix][0][4][property].substring(0, importantChampionData[randomChampion][abilityPrefix][0][4][property].length - 1)
+                    }
+                    // otherwise:
+                    else {
+                        // we simply treat 'cost' as a normal property
+                        importantChampionData[randomChampion][abilityPrefix][0][4][property] =
+                            championData[randomChampion]['abilities'][abilityPrefix][0][property]
+                    }
+                }
             }
         }
-
-        // adding descriptions/leveling/cooldown/non-null properties to all
-        // abilities.
-        for (let abilityPrefix of ['P', 'Q', 'W', 'E', 'R']) {
+        // now for the second mode.
+        if (importantChampionData[randomChampion][abilityPrefix][1]) {
             // the ability descriptions are in the 'effects' section of each
             // ability.
-            for (let effect of championData[name]['abilities'][abilityPrefix][0]['effects']) {
-                importantChampionData[name][abilityPrefix][0][1].push([effect['description'],
+            for (let effect of championData[randomChampion]['abilities'][abilityPrefix][1]['effects']) {
+                importantChampionData[randomChampion][abilityPrefix][1][1].push([effect['description'],
                     // and the leveling content!
                     effect['leveling']])
             }
-
             // the cooldown of the ability is in the 'cooldown' section.
-            if (championData[name]['abilities']
-                [abilityPrefix][0]['cooldown']) {
-                importantChampionData[name][abilityPrefix][0][2] = championData[name]['abilities']
-                    [abilityPrefix][0]['cooldown']['modifiers'][0]
+            if (championData[randomChampion]['abilities']
+                [abilityPrefix][1]['cooldown']) {
+                importantChampionData[randomChampion][abilityPrefix][1][2] = championData[randomChampion]['abilities']
+                    [abilityPrefix][1]['cooldown']['modifiers'][0]
             }
-
             // add non-null properties other than 'effects', 'name', 'icon',
             // 'cooldown', 'notes', and 'blurb', which pretty much has to be
             // non-null.
-            for (let property of Object.keys(championData[name]['abilities'][abilityPrefix][0])) {
-                if ((!['effects', 'name', 'icon', 'cooldown', 'notes', 'blurb'].includes(property)) && (championData[name]['abilities'][abilityPrefix][0][property])) {
+            for (let property of Object.keys(championData[randomChampion]['abilities'][abilityPrefix][1])) {
+                if ((!['effects', 'name', 'icon', 'cooldown', 'notes', 'blurb'].includes(property)) && (championData[randomChampion]['abilities'][abilityPrefix][1][property])) {
                     // if the property is NOT the cost:
                     if (property !== 'cost') {
-                        importantChampionData[name][abilityPrefix][0][4][property] = championData[name]['abilities'][abilityPrefix][0][property]
+                        importantChampionData[randomChampion][abilityPrefix][1][4][property] = championData[randomChampion]['abilities'][abilityPrefix][1][property]
                     } else { // if the property is the cost
                         // if the cost is a leveling thing:
-                        if (Object.keys(championData[name]['abilities'][abilityPrefix][0]['cost']).includes('modifiers')) {
+                        if (Object.keys(championData[randomChampion]['abilities'][abilityPrefix][1]['cost']).includes('modifiers')) {
                             // we basically do the same things we do for
                             // 'cooldown', if you haven't already seen that.
-                            importantChampionData[name][abilityPrefix][0][4][property] = ''
+                            importantChampionData[randomChampion][abilityPrefix][1][4][property] = ''
                             let lastLevelingValue = -1000
-                            for (let levelingValue of championData[name]['abilities'][abilityPrefix]
-                                [0]['cost']['modifiers'][0]['values']) {
+                            for (let levelingValue of championData[randomChampion]['abilities'][abilityPrefix]
+                                [1]['cost']['modifiers'][0]['values']) {
                                 if (levelingValue === lastLevelingValue) {
                                     break
                                 }
-                                importantChampionData[name][abilityPrefix][0][4][property] += levelingValue + '/'
+                                importantChampionData[randomChampion][abilityPrefix][1][4][property] += levelingValue + '/'
                                 lastLevelingValue = levelingValue
                             }
-                            importantChampionData[name][abilityPrefix][0][4][property] =
-                                importantChampionData[name][abilityPrefix][0][4][property].substring(0, importantChampionData[name][abilityPrefix][0][4][property].length - 1)
+                            importantChampionData[randomChampion][abilityPrefix][1][4][property] =
+                                importantChampionData[randomChampion][abilityPrefix][1][4][property].substring(0, importantChampionData[randomChampion][abilityPrefix][1][4][property].length - 1)
                         }
                         // otherwise:
                         else {
                             // we simply treat 'cost' as a normal property
-                            importantChampionData[name][abilityPrefix][0][4][property] =
-                                championData[name]['abilities'][abilityPrefix][0][property]
-                        }
-                    }
-                }
-            }
-
-            // now for the second mode.
-            if (importantChampionData[name][abilityPrefix][1]) {
-                // the ability descriptions are in the 'effects' section of each
-                // ability.
-                for (let effect of championData[name]['abilities'][abilityPrefix][1]['effects']) {
-                    importantChampionData[name][abilityPrefix][1][1].push([effect['description'],
-                        // and the leveling content!
-                        effect['leveling']])
-                }
-
-                // the cooldown of the ability is in the 'cooldown' section.
-                if (championData[name]['abilities']
-                    [abilityPrefix][1]['cooldown']) {
-                    importantChampionData[name][abilityPrefix][1][2] = championData[name]['abilities']
-                        [abilityPrefix][1]['cooldown']['modifiers'][0]
-                }
-
-                // add non-null properties other than 'effects', 'name', 'icon',
-                // 'cooldown', 'notes', and 'blurb', which pretty much has to be
-                // non-null.
-                for (let property of Object.keys(championData[name]['abilities'][abilityPrefix][1])) {
-                    if ((!['effects', 'name', 'icon', 'cooldown', 'notes', 'blurb'].includes(property)) && (championData[name]['abilities'][abilityPrefix][1][property])) {
-                        // if the property is NOT the cost:
-                        if (property !== 'cost') {
-                            importantChampionData[name][abilityPrefix][1][4][property] = championData[name]['abilities'][abilityPrefix][1][property]
-                        } else { // if the property is the cost
-                            // if the cost is a leveling thing:
-                            if (Object.keys(championData[name]['abilities'][abilityPrefix][1]['cost']).includes('modifiers')) {
-                                // we basically do the same things we do for
-                                // 'cooldown', if you haven't already seen that.
-                                importantChampionData[name][abilityPrefix][1][4][property] = ''
-                                let lastLevelingValue = -1000
-                                for (let levelingValue of championData[name]['abilities'][abilityPrefix]
-                                    [1]['cost']['modifiers'][0]['values']) {
-                                    if (levelingValue === lastLevelingValue) {
-                                        break
-                                    }
-                                    importantChampionData[name][abilityPrefix][1][4][property] += levelingValue + '/'
-                                    lastLevelingValue = levelingValue
-                                }
-                                importantChampionData[name][abilityPrefix][1][4][property] =
-                                    importantChampionData[name][abilityPrefix][1][4][property].substring(0, importantChampionData[name][abilityPrefix][1][4][property].length - 1)
-                            }
-                            // otherwise:
-                            else {
-                                // we simply treat 'cost' as a normal property
-                                importantChampionData[name][abilityPrefix][1][4][property] =
-                                    championData[name]['abilities'][abilityPrefix][1][property]
-                            }
+                            importantChampionData[randomChampion][abilityPrefix][1][4][property] =
+                                championData[randomChampion]['abilities'][abilityPrefix][1][property]
                         }
                     }
                 }
@@ -223,18 +217,7 @@ function setup() {
         }
     }
 
-    // a random champion. championNames is a list, and random(), when given
-    // a single list, returns a random element of that list.
-    // randomChampion = random(championNames)
-    randomChampion = 'Nidalee'
-
     print(importantChampionData, randomChampion)
-}
-
-// sets the autoplay of a video to be 'false'. Warning: Only use this as a
-// callback function.
-function turnAutoPlayOff(abilityVideo) {
-    abilityVideo.autoplay(false)
 }
 
 function draw() {
