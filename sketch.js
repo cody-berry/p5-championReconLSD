@@ -19,6 +19,7 @@ let importantChampionData /* constantly updated to include everything we
 let abilityInfo
 /* what is the ability we've selected? */
 let selectedAbility
+let randomChampionIndex
 
 function preload() {
     font = loadFont('data/consola.ttf')
@@ -57,7 +58,8 @@ function setup() {
 
     // a random champion. championNames is a list, and random(), when given
     // a single list, returns a random element of that list.
-    randomChampion = random(championNames)
+    randomChampionIndex = round(random(0, championNames.length - 1))
+    randomChampion = championNames[randomChampionIndex]
     // randomChampion = 'Nidalee'
 
     importantChampionData = {}
@@ -215,6 +217,7 @@ function setup() {
             }
         }
     }
+    debugCorner.setText(`random champion index: ${randomChampionIndex}`, 3)
 
     print(importantChampionData, randomChampion)
 }
@@ -323,7 +326,7 @@ function draw() {
     }
 
     /* debugCorner needs to be last so its z-index is highest */
-    debugCorner.setText(`frameCount: ${frameCount}`, 2)
+    debugCorner.setText(`frame count: ${frameCount}`, 2)
     debugCorner.setText(`fps: ${frameRate().toFixed(0)}`, 1)
     debugCorner.showTop()
 }
@@ -671,12 +674,204 @@ function printAbilityDetails(abilityPrefix) {
     }
 }
 
+// changes the champion index by a certain amount
+function changeChampionIndex(amount) {
+    if (['random', 'Random'].includes(amount)) {
+        randomChampionIndex = round(random(0, championNames.length))
+    } else {
+        randomChampionIndex += amount
+    }
+    if (randomChampionIndex >= 0) { /* omg do we really have to check if
+         the random champion index isn't negative */
+        randomChampion = championNames[randomChampionIndex]
+    } else {
+        randomChampionIndex = championNames.length + randomChampionIndex
+        randomChampion = championNames[randomChampionIndex]
+    } if (randomChampionIndex >= championNames.length)/* and the champion index
+     isn't above the length */ {
+        randomChampionIndex = randomChampionIndex - championNames.length
+        randomChampion = championNames[randomChampionIndex]
+    }
+    debugCorner.setText(`random champion index: ${randomChampionIndex}`, 3)
+    importantChampionData[randomChampion] = {
+        // the champion icon that you see when looking at the map in League.
+        'icon': loadImage(championData[randomChampion]['icon']),
+    }
+    // now what about the abilities, like 'P', 'Q', 'W', 'E', 'R'?
+    for (let abilityPrefix of ['P', 'Q', 'W', 'E', 'R']) {
+        // we add them here.
+        importantChampionData[randomChampion][abilityPrefix] = [
+            [
+                // the ability name for the first mode
+                championData[randomChampion]['abilities'][abilityPrefix][0]['name'],
+                // the ability descriptions and leveling attributes, which we
+                // will fill in later. this includes cooldowns.
+                [],
+                // the cooldown for the first mode
+                undefined,
+                // the ability icon
+                loadImage(championData[randomChampion]['abilities'][abilityPrefix][0]['icon']),
+                // non-null properties
+                {},
+                createVideo(
+                    abilityLinkVideoStart + championData[randomChampion]['id'].toString().padStart(4, '0') +
+                    '/ability_' + championData[randomChampion]['id'].toString().padStart(4, '0')
+                    + '_' + abilityPrefix + '1.webm'
+                )
+            ]
+        ]
+        if (championData[randomChampion]['abilities'][abilityPrefix][1]) {
+            importantChampionData[randomChampion][abilityPrefix].push(
+                [
+                    // the ability name for the second mode
+                    championData[randomChampion]['abilities'][abilityPrefix][1]['name'],
+                    // the ability descriptions and leveling attributes, which we
+                    // will fill in later. this includes cooldowns.
+                    [],
+                    // the cooldown for the second mode
+                    undefined,
+                    // the ability icon
+                    loadImage(championData[randomChampion]['abilities'][abilityPrefix][0]['icon']),
+                    // non-null properties
+                    {},
+                    createVideo(
+                        abilityLinkVideoStart + championData[randomChampion]['id'].toString().padStart(4, '0') +
+                        '/ability_' + championData[randomChampion]['id'].toString().padStart(4, '0')
+                        + '_' + abilityPrefix + '2.webm'
+                    )
+                ]
+            )
+        }
+    }
+    // adding descriptions/leveling/cooldown/non-null properties to all
+    // abilities.
+    for (let abilityPrefix of ['P', 'Q', 'W', 'E', 'R']) {
+        // the ability descriptions are in the 'effects' section of each
+        // ability.
+        for (let effect of championData[randomChampion]['abilities'][abilityPrefix][0]['effects']) {
+            importantChampionData[randomChampion][abilityPrefix][0][1].push([effect['description'],
+                // and the leveling content!
+                effect['leveling']])
+        }
+        // the cooldown of the ability is in the 'cooldown' section.
+        if (championData[randomChampion]['abilities']
+            [abilityPrefix][0]['cooldown']) {
+            importantChampionData[randomChampion][abilityPrefix][0][2] = championData[randomChampion]['abilities']
+                [abilityPrefix][0]['cooldown']['modifiers'][0]
+        }
+        // add non-null properties other than 'effects', 'name', 'icon',
+        // 'cooldown', 'notes', and 'blurb', which pretty much has to be
+        // non-null.
+        for (let property of Object.keys(championData[randomChampion]['abilities'][abilityPrefix][0])) {
+            if ((!['effects', 'name', 'icon', 'cooldown', 'notes', 'blurb'].includes(property)) && (championData[randomChampion]['abilities'][abilityPrefix][0][property])) {
+                // if the property is NOT the cost:
+                if (property !== 'cost') {
+                    importantChampionData[randomChampion][abilityPrefix][0][4][property] = championData[randomChampion]['abilities'][abilityPrefix][0][property]
+                } else { // if the property is the cost
+                    // if the cost is a leveling thing:
+                    if (Object.keys(championData[randomChampion]['abilities'][abilityPrefix][0]['cost']).includes('modifiers')) {
+                        // we basically do the same things we do for
+                        // 'cooldown', if you haven't already seen that.
+                        importantChampionData[randomChampion][abilityPrefix][0][4][property] = ''
+                        let lastLevelingValue = -1000
+                        for (let levelingValue of championData[randomChampion]['abilities'][abilityPrefix]
+                            [0]['cost']['modifiers'][0]['values']) {
+                            if (levelingValue === lastLevelingValue) {
+                                break
+                            }
+                            importantChampionData[randomChampion][abilityPrefix][0][4][property] += levelingValue + '/'
+                            lastLevelingValue = levelingValue
+                        }
+                        importantChampionData[randomChampion][abilityPrefix][0][4][property] =
+                            importantChampionData[randomChampion][abilityPrefix][0][4][property].substring(0, importantChampionData[randomChampion][abilityPrefix][0][4][property].length - 1)
+                    }
+                    // otherwise:
+                    else {
+                        // we simply treat 'cost' as a normal property
+                        importantChampionData[randomChampion][abilityPrefix][0][4][property] =
+                            championData[randomChampion]['abilities'][abilityPrefix][0][property]
+                    }
+                }
+            }
+        }
+        // now for the second mode.
+        if (importantChampionData[randomChampion][abilityPrefix][1]) {
+            // the ability descriptions are in the 'effects' section of each
+            // ability.
+            for (let effect of championData[randomChampion]['abilities'][abilityPrefix][1]['effects']) {
+                importantChampionData[randomChampion][abilityPrefix][1][1].push([effect['description'],
+                    // and the leveling content!
+                    effect['leveling']])
+            }
+            // the cooldown of the ability is in the 'cooldown' section.
+            if (championData[randomChampion]['abilities']
+                [abilityPrefix][1]['cooldown']) {
+                importantChampionData[randomChampion][abilityPrefix][1][2] = championData[randomChampion]['abilities']
+                    [abilityPrefix][1]['cooldown']['modifiers'][0]
+            }
+            // add non-null properties other than 'effects', 'name', 'icon',
+            // 'cooldown', 'notes', and 'blurb', which pretty much has to be
+            // non-null.
+            for (let property of Object.keys(championData[randomChampion]['abilities'][abilityPrefix][1])) {
+                if ((!['effects', 'name', 'icon', 'cooldown', 'notes', 'blurb'].includes(property)) && (championData[randomChampion]['abilities'][abilityPrefix][1][property])) {
+                    // if the property is NOT the cost:
+                    if (property !== 'cost') {
+                        importantChampionData[randomChampion][abilityPrefix][1][4][property] = championData[randomChampion]['abilities'][abilityPrefix][1][property]
+                    } else { // if the property is the cost
+                        // if the cost is a leveling thing:
+                        if (Object.keys(championData[randomChampion]['abilities'][abilityPrefix][1]['cost']).includes('modifiers')) {
+                            // we basically do the same things we do for
+                            // 'cooldown', if you haven't already seen that.
+                            importantChampionData[randomChampion][abilityPrefix][1][4][property] = ''
+                            let lastLevelingValue = -1000
+                            for (let levelingValue of championData[randomChampion]['abilities'][abilityPrefix]
+                                [1]['cost']['modifiers'][0]['values']) {
+                                if (levelingValue === lastLevelingValue) {
+                                    break
+                                }
+                                importantChampionData[randomChampion][abilityPrefix][1][4][property] += levelingValue + '/'
+                                lastLevelingValue = levelingValue
+                            }
+                            importantChampionData[randomChampion][abilityPrefix][1][4][property] =
+                                importantChampionData[randomChampion][abilityPrefix][1][4][property].substring(0, importantChampionData[randomChampion][abilityPrefix][1][4][property].length - 1)
+                        }
+                        // otherwise:
+                        else {
+                            // we simply treat 'cost' as a normal property
+                            importantChampionData[randomChampion][abilityPrefix][1][4][property] =
+                                championData[randomChampion]['abilities'][abilityPrefix][1][property]
+                        }
+                    }
+                }
+            }
+        }
+    }
+    abilityInfo.html('press any ability to read ability info')
+}
+
+
 function keyPressed() {
     /* stop sketch */
     if (keyCode === 97) { /* numpad 1 */
         noLoop()
         instructions.html(`<pre>
             sketch stopped</pre>`)
+    } if (keyCode === 98 /* numpad 2 */) /* decrease champion index by 10 */ {
+        changeChampionIndex(-10)
+    } if (keyCode === 99 /* numpad 3 → decrease by 100 */) {
+        changeChampionIndex(-100)
+    } if (keyCode === 100) /* numpad 4 → decrease by 1*/{
+        changeChampionIndex(-1)
+    } if (keyCode === 101) /* numpad 5 → random */{
+        changeChampionIndex('random')
+    } if (keyCode === 102) /* numpad 6 → increase by 1 */{
+        changeChampionIndex(1)
+    } if (keyCode === 103) /* numpad 7 → increase by 100 */{
+        changeChampionIndex(100)
+    } if (keyCode === 104) /* numpad 8 → increase by 10 */{
+        changeChampionIndex(10)
+    } if (keyCode === 105) /* numpad 9 → increase by 50 */{
+        changeChampionIndex(50)
     }
 
     if (key === '`') { /* toggle debug corner visibility */
@@ -684,19 +879,19 @@ function keyPressed() {
         console.log(`debugCorner visibility set to ${debugCorner.visible}`)
     }
 
-    if (['P', '1', 'p'].includes(key)) {   // then research the passive
+    if (['P', '1', 'p'].includes(key) && keyCode !== 97) { // then research the passive
         selectedAbility = 'P'
         printAbilityDetails('P')
-    } if (['Q', '2', 'q'].includes(key)) { // then research Q
+    } if (['Q', '2', 'q'].includes(key) && keyCode !== 98) { // then research Q
         selectedAbility = 'Q'
         printAbilityDetails('Q')
-    } if (['W', '3', 'w'].includes(key)) { // then research W
+    } if (['W', '3', 'w'].includes(key) && keyCode !== 99) { // then research W
         selectedAbility = 'W'
         printAbilityDetails('W')
-    } if (['E', '4', 'e'].includes(key)) { // then research E
+    } if (['E', '4', 'e'].includes(key) && keyCode !== 100) { // then research E
         selectedAbility = 'E'
         printAbilityDetails('E')
-    } if (['R', '5', 'r'].includes(key)) { // then research R
+    } if (['R', '5', 'r'].includes(key) && keyCode !== 101) { // then research R
         selectedAbility = 'R'
         printAbilityDetails('R')
     }
