@@ -241,7 +241,7 @@ function draw() {
     // if the passive icon exists, draw it at its normal size in the bottom-left
     // corner. the reason why we're not doing a for loop here is that I want
     // to separate the passive from the other abilities.
-    if (importantChampionData[randomChampion]['P'][3]) {
+    if (importantChampionData[randomChampion]['P'][0][3]) {
         // i want the bottom-left corner to be at 20, height-20. all icon
         // heights and widths are 64.
         // however, if we're selecting this ability, we display it up a bit
@@ -266,9 +266,9 @@ function draw() {
             rect(14, height-110, 90, height-34)
             stroke(0, 0, 100, 5)
             rect(13, height-111, 91, height-33)
-            image(importantChampionData[randomChampion][0]['P'][3], 20, height-104)
+            image(importantChampionData[randomChampion]['P'][0][3], 20, height-104)
         } else {
-            image(importantChampionData[randomChampion][0]['P'][3], 20, height-84)
+            image(importantChampionData[randomChampion]['P'][0][3], 20, height-84)
         }
 
         noStroke()
@@ -285,7 +285,7 @@ function draw() {
     // for each icon...
     for (let abilityPrefix of ['Q', 'W', 'E', 'R']) {
         // check if it's loaded.
-        if (importantChampionData[randomChampion][abilityPrefix][3]) {
+        if (importantChampionData[randomChampion][abilityPrefix][0][3]) {
             // for every icon, we move to the right by 80. then add 140 for
             // spacing from the passive.
             // however, if we're selecting this ability, we display it up a bit
